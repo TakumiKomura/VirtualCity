@@ -2,6 +2,7 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include<time.h>
 
 #define ROW 5
 #define COL 50
@@ -48,8 +49,8 @@ int main()
         exit(1);
     }
 
-    string output_path = "250_records_out.txt";
-    ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_in)
+    string output_path = "250_records_complimented.txt";
+    ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
     if(!file_out){
         cerr << "could not open file: "<< output_path << "\n";
         exit(1);
