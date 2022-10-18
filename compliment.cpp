@@ -2,12 +2,13 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
-#include<time.h>
+#include<chrono>
 
 #define ROW 5
 #define COL 50
 
 using namespace std;
+using namespace chrono;
 
 struct Point{
     double x;
@@ -61,7 +62,8 @@ int main()
     input(geometry, file_in);
     output(geometry, file_out);
 
-    // clock_t start = clock();
-    // clock_t end = clock();
-    // cout << (double)(end - start) / CLOCKS_PER_SEC << " sec" << endl;
+    // system_clock::time_point start, end;
+    // start = system_clock::now();
+    // end = system_clock::now();
+    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 }
