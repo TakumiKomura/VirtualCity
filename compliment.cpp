@@ -44,14 +44,14 @@ int main()
     string input_path = "250_records.txt";
     ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
     if(!file_in){
-        cerr << "ファイルを開けません："<< input_path << "\n";
+        cerr << "could not open file: "<< input_path << "\n";
         exit(1);
     }
 
     string output_path = "250_records_out.txt";
     ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_in)
     if(!file_out){
-        cerr << "ファイルを開けません："<< output_path << "\n";
+        cerr << "could not open file: "<< output_path << "\n";
         exit(1);
     }
 
