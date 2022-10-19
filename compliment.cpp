@@ -41,6 +41,69 @@ void output(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
+double calc(double neibourhood[])
+{
+
+}
+
+void compliment(vector<vector<Point>>& geometry)
+{
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        for (int j = 1; j < COL - 1; ++j)
+        {
+            if(geometry[i][j].z == -9999.99){
+                // 8近傍
+                double neighbourhood[8] = {geometry[i - 1][j - 1].z,
+                                           geometry[i - 1][j].z,
+                                           geometry[i - 1][j + 1].z,
+                                           geometry[i][j - 1].z,
+                                           geometry[i][j + 1].z,
+                                           geometry[i + 1][j - 1].z,
+                                           geometry[i + 1][j].z,
+                                           geometry[i + 1][j + 1].z};
+                geometry[i][j].z = calc(neighbourhood);
+            }
+        }
+    }
+    for (int i = 1; i < COL - 1; ++i)
+    {
+        if(geometry[0][i].z == -9999.99){
+
+        }
+    }
+    for (int i = 1; i < COL - 1; ++i)
+    {
+        if(geometry[ROW - 1][i].z == -9999.99){
+            
+        }
+    }
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        if(geometry[i][0].z == -9999.99){
+            
+        }
+    }
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        if(geometry[i][COL - 1].z == -9999.99){
+            
+        }
+    }
+    if(geometry[0][0].z == -9999.99){
+
+    }
+    if(geometry[0][COL - 1].z == -9999.99){
+
+    }
+    if(geometry[ROW - 1][0].z == -9999.99){
+
+    }
+    if(geometry[ROW - 1][COL - 1].z == -9999.99){
+
+    }
+}
+
 int main()
 {
     string input_path = "250_records.txt";
