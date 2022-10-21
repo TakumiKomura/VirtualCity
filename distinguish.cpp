@@ -1,14 +1,49 @@
 //distinguish ground points from building points
 #include<iostream>
+#include<fstream>
 #include<cmath>
 #include<vector>
+#include<chrono>
+
+#define ROW 923
+#define COL 1131
+
+using namespace std;
+using namespace chrono;
+
 struct Point{
-        int x;
-        int y;
-        int z;
+    double x;
+    double y;
+    double z;
+    bool isBuilding = true; //建物ラベルとして初期化
+    int area;
 };
 
-void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
+// read file and strage points as an array
+void input_complimented(vector<vector<Point>>& geometry, ifstream& file_in)
+{   
+    for (int i = 0; i < ROW; ++i)
+    {
+        for (int j = 0; j < COL; ++j)
+        {
+            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z >> geometry[i][j].area;
+        }
+    }
+}
+
+// write points to file
+void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
+{
+    for (int i = 0; i < ROW; ++i)
+    {
+        for (int j = 0; j < COL; ++j)
+        {
+            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << endl;
+        }
+    }
+}
+
+void judge(std::vector<std::vector<Point>>& geometry,int startrow,int startcol)
 {
     
     int pastrow[10000];//1つ前の点の行の添え字
@@ -66,3 +101,34 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
 #flag=0は地面、1は建物
 #今見ている点はnow
 #探索済みを判断するフラグをendとする*/
+
+int main()
+{
+    // string input_path = "250_records_complimented.txt";
+    string input_path = "53394640_dsm_1m_complimented.txt";
+
+    ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
+    if(!file_in){
+        cerr << "could not open file: "<< input_path << "\n";
+        exit(1);
+    }
+
+    // string output_path = "250_records_distinguished.txt";
+    string output_path = "53394640_dsm_1m_distinguished.txt";
+
+    ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
+    if(!file_out){
+        cerr << "could not open file: "<< output_path << "\n";
+        exit(1);
+    }
+
+    vector<vector<Point>> geometry(ROW, vector<Point>(COL));
+
+    input_complimented(geometry, file_in);
+    output_distinguished(geometry, file_out);
+
+    // system_clock::time_point start, end;
+    // start = system_clock::now();
+    // end = system_clock::now();
+    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
+}
