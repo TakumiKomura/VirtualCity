@@ -42,6 +42,7 @@ void input1(vector<vector<Point>>& geometry, ifstream& file_in)
     {
         file_in >> trash[j].x >> trash[j].y >> trash[j].z;
     }
+    delete[] trash;
     
     for (int i = 0; i < 308; ++i)
     {
@@ -97,12 +98,6 @@ void input1(vector<vector<Point>>& geometry, ifstream& file_in)
             geometry[i][j].area = 8;
         }
     }
-
-    for (int j = 0; j < 767; ++j)
-    {
-        file_in >> trash[j].x >> trash[j].y >> trash[j].z;
-    }
-    delete[] trash;
 }
 
 // write points to file
