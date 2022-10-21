@@ -24,7 +24,7 @@ struct Point{
 // read file and strage points as an array
 void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
 {   
-    for (int i = 308; i < ROW; ++i)
+    for (int i = 0; i < ROW; ++i)
     {
         for (int j = 0; j < COL; ++j)
         {
