@@ -34,20 +34,17 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
 }
 
 // write points to file
-void output_removed(vector<vector<Point>>& geometry, ofstream& file_out)
+void output_removed(vector<Point>& removed, ofstream& file_out)
 {
-    for (int i = 0; i < ROW; ++i)
+    for (int i = 0; i < int(removed.size()); ++i)
     {
-        for (int j = 0; j < COL; ++j)
-        {
-            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << endl;
-        }
+        file_out << removed[i].x << ' ' << removed[i].y << ' ' << removed[i].z << ' ' << removed[i].isBuilding << endl;
     }
 }
 
-double calc()
+double mean(double val1, double val2, double val3, double val4)
 {
-
+    return (val1 + val2 + val3 + val4) / 4;
 }
 
 void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
@@ -63,11 +60,18 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
                              + geometry[i + 1][j].isBuilding 
                              + geometry[i + 1][j + 1].isBuilding;
             if (num_building == 2){
+                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+                // removed[count].z = calc();
                 count++;
+                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+                // removed[count].z = calc();
             }else{
                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                removed[count].z = calc();
+                removed[count].z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
+                                        geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
                 if (num_building == 1){
                     removed[count].isBuilding = false;
                 }else{
@@ -105,7 +109,7 @@ int main()
 
     input_distinguished(geometry, file_in);
     remove(geometry, removed);
-    output_removed(geometry, file_out);
+    output_removed(removed, file_out);
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
