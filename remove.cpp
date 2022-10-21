@@ -22,18 +22,6 @@ struct Point{
 };
 
 // read file and strage points as an array
-
-// void input1(vector<vector<Point>>& geometry, ifstream& file_in)
-// {
-//     for (int i = 0; i < ROW; ++i)
-//     {
-//         for (int j = 0; j < COL; ++j)
-//         {
-//             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-//         }
-//     }
-// }
-
 void input3(vector<vector<Point>>& geometry, ifstream& file_in)
 {   
     for (int i = 308; i < ROW; ++i)
@@ -57,6 +45,40 @@ void output3(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
+double calc()
+{
+
+}
+
+void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+{
+    int count = -1;
+    for (int i = 0; i < ROW; i += 2)
+    {
+        for (int j = 0; j < COL; j += 2)
+        {
+            count++;
+            int num_building = geometry[i][j].isBuilding
+                             + geometry[i][j + 1].isBuilding 
+                             + geometry[i + 1][j].isBuilding 
+                             + geometry[i + 1][j + 1].isBuilding;
+            if (num_building == 2){
+                count++;
+            }else{
+                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+                removed[count].z = calc();
+                if (num_building == 1){
+                    removed[count].isBuilding = false;
+                }else{
+                    removed[count].isBuilding = true;
+                }
+            }
+        }
+    }
+    removed.resize(count);
+}
+
 int main()
 {
     // string input_path = "250_records_distinguished.txt";
@@ -78,8 +100,11 @@ int main()
     }
 
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
+    vector<Point> removed;
+    removed.resize(ROW * COL);
 
     input3(geometry, file_in);
+    remove(geometry, removed);
     output3(geometry, file_out);
 
     // system_clock::time_point start, end;
