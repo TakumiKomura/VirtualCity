@@ -22,7 +22,7 @@ struct Point{
 };
 
 // read file and strage points as an array
-void input3(vector<vector<Point>>& geometry, ifstream& file_in)
+void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
 {   
     for (int i = 308; i < ROW; ++i)
     {
@@ -34,7 +34,7 @@ void input3(vector<vector<Point>>& geometry, ifstream& file_in)
 }
 
 // write points to file
-void output3(vector<vector<Point>>& geometry, ofstream& file_out)
+void output_removed(vector<vector<Point>>& geometry, ofstream& file_out)
 {
     for (int i = 0; i < ROW; ++i)
     {
@@ -103,9 +103,9 @@ int main()
     vector<Point> removed;
     removed.resize(ROW * COL);
 
-    input3(geometry, file_in);
+    input_distinguished(geometry, file_in);
     remove(geometry, removed);
-    output3(geometry, file_out);
+    output_removed(geometry, file_out);
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
