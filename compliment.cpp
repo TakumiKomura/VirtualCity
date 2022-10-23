@@ -3,6 +3,8 @@
 #include<fstream>
 #include<vector>
 #include<chrono>
+#include<cmath>
+#include<algorithm>
 
 // #define ROW 5 
 // #define COL 50
@@ -79,6 +81,7 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 5;
         }
+        
     }
     for (int i = 616; i < ROW; ++i)
     {
@@ -112,10 +115,74 @@ void output_complimented(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-// double calc(double neighbourhood[])
-// {
-//     neighbourhood.
-// }
+double calc(double neighbourhood[], int len)
+{
+    double compliment_value = 0;
+    int crash_num = 0;
+    // 平均値
+    // for (int i = 0; i < len; ++i)
+    // {
+    //     if(neighbourhood[i] == -9999.99){
+    //         ++crash_num;
+    //         continue;
+    //     }
+    //     compliment_value += neighbourhood[i];
+    // }
+    // return compliment_value / (len - crash_num);
+
+    // 平均値に最も近い値
+    // for (int i = 0; i < len; ++i)
+    // {
+    //     if(neighbourhood[i] == -9999.99){
+    //         ++crash_num;
+    //     }
+    //     else{compliment_value += neighbourhood[i];}
+    // }
+
+    // compliment_value /= (len - crash_num);
+    // double min = fabs(compliment_value - neighbourhood[0]);
+    // int min_id = 0;
+
+    // for (int i = 1; i < len; ++i)
+    // {
+    //     if(min > fabs(compliment_value - neighbourhood[i])){
+    //         min = fabs(compliment_value - neighbourhood[i]);
+    //         min_id = i;
+    //     }
+    // }
+    // return neighbourhood[min_id];
+
+    //中央値
+    // sort(neighbourhood, neighbourhood + len);
+    // for (int i = 0; i < len; ++i)
+    // {
+    //     if(neighbourhood[i] == -9999.99){
+    //         ++crash_num;
+    //     }
+    // }
+    
+    // if((len - crash_num) % 2){
+    //     return neighbourhood[(len - crash_num) / 2 + crash_num];
+    // }
+    // else{
+    //    return (neighbourhood[(len - crash_num) / 2 + crash_num] + neighbourhood[(len - crash_num) / 2 + crash_num - 1]) / 2.0;
+    // }
+
+    //最小値
+    // int min = neighbourhood[0]; //配列の先頭は欠損値が入らないように送られているので問題ない
+    // int min_id = 0;
+    // for (int i = 1; i < len; ++i)
+    // {
+    //     if(neighbourhood[i] == -9999.99){
+    //         continue;
+    //     }
+    //     if(min > neighbourhood[i]){
+    //         min = neighbourhood[i];
+    //         min_id = i;
+    //     }
+    // }
+    // return neighbourhood[min_id];
+}
 
 // void compliment(vector<vector<Point>>& geometry)
 // {
@@ -133,45 +200,77 @@ void output_complimented(vector<vector<Point>>& geometry, ofstream& file_out)
 //                                            geometry[i + 1][j - 1].z,
 //                                            geometry[i + 1][j].z,
 //                                            geometry[i + 1][j + 1].z};
-//                 geometry[i][j].z = calc(neighbourhood);
+//                 geometry[i][j].z = calc(neighbourhood, 8);
 //             }
 //         }
 //     }
 //     for (int i = 1; i < COL - 1; ++i)
 //     {
 //         if(geometry[0][i].z == -9999.99){
-
+//             double neighbourhood[5] = {geometry[1][i].z,
+//                                        geometry[1][i + 1].z,
+//                                        geometry[0][i + 1].z,
+//                                        geometry[0][i - 1].z,
+//                                        geometry[1][i - 1].z};
+//             geometry[0][i].z = calc(neighbourhood, 5);
 //         }
 //     }
 //     for (int i = 1; i < COL - 1; ++i)
 //     {
 //         if(geometry[ROW - 1][i].z == -9999.99){
-            
+//             double neighbourhood[5] = {geometry[ROW - 2][i].z,
+//                                        geometry[ROW - 2][i + 1].z,
+//                                        geometry[ROW - 2][i - 1].z,
+//                                        geometry[ROW - 1][i - 1].z,
+//                                        geometry[ROW - 1][i + 1].z};
+//             geometry[ROW - 1][i].z = calc(neighbourhood, 5);
 //         }
 //     }
 //     for (int i = 1; i < ROW - 1; ++i)
 //     {
 //         if(geometry[i][0].z == -9999.99){
-            
+//             double neighbourhood[5] = {geometry[i][1].z,
+//                                        geometry[i + 1][1].z,
+//                                        geometry[i - 1][1].z,
+//                                        geometry[i + 1][0].z,
+//                                        geometry[i - 1][0].z};
+//             geometry[i][0].z = calc(neighbourhood, 5);
 //         }
 //     }
 //     for (int i = 1; i < ROW - 1; ++i)
 //     {
 //         if(geometry[i][COL - 1].z == -9999.99){
-            
+//             double neighbourhood[5] = {geometry[i][COL - 2].z,
+//                                        geometry[i + 1][COL - 2].z,
+//                                        geometry[i - 1][COL - 2].z,
+//                                        geometry[i + 1][COL - 1].z,
+//                                        geometry[i - 1][COL - 1].z};
+//             geometry[i][COL - 1].z = calc(neighbourhood, 5);
 //         }
 //     }
 //     if(geometry[0][0].z == -9999.99){
-
+//         double neighbourhood[3] = {geometry[0][1].z,
+//                                    geometry[1][0].z,
+//                                    geometry[1][1].z};
+//         geometry[0][0].z =calc(neighbourhood, 3);
 //     }
 //     if(geometry[0][COL - 1].z == -9999.99){
-
+//         double neighbourhood[3] = {geometry[0][COL - 2].z,
+//                                    geometry[1][COL - 2].z,
+//                                    geometry[1][COL - 1].z};
+//         geometry[0][COL - 1].z =calc(neighbourhood, 3);
 //     }
 //     if(geometry[ROW - 1][0].z == -9999.99){
-
+//         double neighbourhood[3] = {geometry[ROW - 1][1].z,
+//                                    geometry[ROW - 2][0].z,
+//                                    geometry[ROW - 2][1].z};
+//         geometry[ROW - 1][0].z =calc(neighbourhood, 3);
 //     }
 //     if(geometry[ROW - 1][COL - 1].z == -9999.99){
-
+//         double neighbourhood[3] = {geometry[ROW - 1][COL - 2].z,
+//                                    geometry[ROW - 2][COL - 2].z,
+//                                    geometry[ROW - 2][COL - 1].z};
+//         geometry[ROW - 1][COL - 1].z =calc(neighbourhood, 3);
 //     }
 // }
 
@@ -199,6 +298,38 @@ int main()
 
     input_raw(geometry, file_in);
     output_complimented(geometry, file_out);
+
+    //どこがずれていたか調べる用
+    // for(int i = 0; i < ROW; ++i){
+    //     cout << geometry[i][0].x << " " << geometry[i][COL - 1].x << endl;
+    //     if(i > 400 && i < 420){
+    //         cout << endl << i  << endl;
+    //         for(int j = 0; j < 30; ++j){
+    //             cout << geometry[i][j].x << " ";
+    //         }
+    //     }
+    // }
+
+    // system_clock::time_point start, end;
+    // start = system_clock::now();
+    // compliment(geometry);
+    // end = system_clock::now();
+    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
+
+    // //欠損点がどこか調べる用
+    // for (int i = 0; i < ROW; ++i)
+    // {
+    //     for (int j = 0; j < COL; ++j)
+    //     {
+    //         if(geometry[i][j].z == -9999.99){
+    //             cout << "(" << i << ", " << j << "): " << geometry[i][j].z << endl;
+    //         }
+    //     }
+    // }
+    // cout << "clear" <<endl;
+
+    
+
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
