@@ -3,6 +3,8 @@
 #include<fstream>
 #include<vector>
 #include<chrono>
+#include<cmath>
+#include<algorithm>
 
 // #define ROW 5 
 // #define COL 50
@@ -42,9 +44,63 @@ void output_removed(vector<Point>& removed, ofstream& file_out)
     }
 }
 
+double _mean(double val1, double val2, double val3, double val4)
+{
+    return (val1 + val2 + val3 + val4) / 2;
+}
+
 double mean(double val1, double val2, double val3, double val4)
 {
     return (val1 + val2 + val3 + val4) / 4;
+}
+
+double median(double val1, double val2, double val3, double val4)
+{
+    double big1, big2, big3, small1, small2, small3;
+
+    if(val1 > val2){
+        big1 = val1;
+        small1 = val2;
+    }else{
+        big1 = val2;
+        small1 = val1;
+    }
+
+    if(val3 > val4){
+        big2 = val3;
+        small2 = val4;
+    }else{
+        big2 = val4;
+        small2 = val3;
+    }
+
+    if(big1 > big2)
+        big3 = big1;
+    else
+        big3 = big2;
+    
+    if(small1 > small2)
+        small3 = small1;
+    else
+        small3 = small2;
+
+    return (big3 + small3) / 2;
+}
+
+double closest_to_mean(double val1, double val2, double val3, double val4)
+{
+    double val[4] = {val1, val2, val3, val4};
+    double mean = (val1 + val2 + val3 + val4) / 4;
+    double min = fabs(val[0] - mean);
+    int min_idx = 0;
+    double tmp;
+    for (int i = 1; i < 4; i++){
+        if(tmp = fabs(val[i] - mean) < min){
+            min = tmp;
+            min_idx = i;
+        }
+    }
+    return val[min_idx];
 }
 
 void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
@@ -62,11 +118,20 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
             if (num_building == 2){
                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                // removed[count].z = calc();
+                removed[count].z = _mean(geometry[i][j].z * geometry[i][j].isBuilding,
+                                        geometry[i][j + 1].z * geometry[i][j + 1].isBuilding, 
+                                        geometry[i + 1][j].z * geometry[i + 1][j].isBuilding,
+                                        geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding);
+                removed[count].isBuilding = true;
+
                 count++;
                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                // removed[count].z = calc();
+                removed[count].z = _mean(geometry[i][j].z * !geometry[i][j].isBuilding,
+                                        geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding, 
+                                        geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding,
+                                        geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding);
+                removed[count].isBuilding = false;
             }else{
                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
