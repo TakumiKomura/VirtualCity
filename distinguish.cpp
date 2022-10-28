@@ -214,7 +214,7 @@ int main()
     jgeometry.clear();
     for(int i=616; i<ROW; i++){
         for(int j=377; j<754; j++){
-            jgeometry[i][j-377]=geometry[i][j];
+            jgeometry[i-616][j-377]=geometry[i][j];
             if(jgeometry[i][j].z<=min){
                 min=jgeometry[i][j].z;
                 slow=i;
@@ -226,7 +226,7 @@ int main()
     jgeometry.clear();
     for(int i=616; i<ROW; i++){
         for(int j=754; j<COL; j++){
-            jgeometry[i][j-754]=geometry[i][j];
+            jgeometry[i-616][j-754]=geometry[i][j];
             if(jgeometry[i][j].z<=min){
                 min=jgeometry[i][j].z;
                 slow=i;
