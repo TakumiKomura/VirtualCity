@@ -10,7 +10,7 @@
 // #define COL 50
 
 #define ROW 923
-#define COL 1131
+#define COL 1131 // -4
 
 using namespace std;
 using namespace chrono;
@@ -39,17 +39,17 @@ struct Point{
 void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
 {
     Point *trash;
-    trash = new Point[897];
+    trash = new Point;
     for (int j = 0; j < 897; ++j)
     {
-        file_in >> trash[j].x >> trash[j].y >> trash[j].z;
+        file_in >> trash->x >> trash->y >> trash->z;
     }
-    delete[] trash;
-    
     for (int i = 0; i < 308; ++i)
     {
         for (int j = 0; j < 377; ++j)
         {
+            // file_in >> trash->x >> trash->y >> trash->z;
+            // file_in >> trash->x >> trash->y >> trash->z;
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 0;
         }
@@ -63,11 +63,15 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 2;
         }
+        // file_in >> trash->x >> trash->y >> trash->z;
+        // file_in >> trash->x >> trash->y >> trash->z;
     }
     for (int i = 308; i < 616; ++i)
     {
         for (int j = 0; j < 377; ++j)
         {
+            // file_in >> trash->x >> trash->y >> trash->z;
+            // file_in >> trash->x >> trash->y >> trash->z;
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 3;
         }
@@ -81,12 +85,15 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 5;
         }
-        
+        // file_in >> trash->x >> trash->y >> trash->z;
+        // file_in >> trash->x >> trash->y >> trash->z;
     }
     for (int i = 616; i < ROW; ++i)
     {
         for (int j = 0; j < 377; ++j)
         {
+            // file_in >> trash->x >> trash->y >> trash->z;
+            // file_in >> trash->x >> trash->y >> trash->z;
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 6;
         }
@@ -100,7 +107,10 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 8;
         }
+        // file_in >> trash->x >> trash->y >> trash->z;
+        // file_in >> trash->x >> trash->y >> trash->z;
     }
+    delete trash;
 }
 
 // write points to file
