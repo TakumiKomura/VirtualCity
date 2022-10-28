@@ -126,7 +126,7 @@ int main()
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
- vector<vector<Point>> jgeometry;
+ vector<vector<Point>> jgeometry(ROW,vector<Point>(COL));
     int min=9999,slow,scol;
     for(int i=0; i<308; i++){
         for(int j=0; j<377; j++){
