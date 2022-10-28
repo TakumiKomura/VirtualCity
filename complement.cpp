@@ -115,10 +115,10 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-double calc(double neighbourhood[], int len)
-{
-    double complement_value = 0;
-    int crash_num = 0;
+// double calc(double neighbourhood[], int len)
+// {
+//     double complement_value = 0;
+//     int crash_num = 0;
     // 平均値
     // for (int i = 0; i < len; ++i)
     // {
@@ -182,7 +182,7 @@ double calc(double neighbourhood[], int len)
     //     }
     // }
     // return neighbourhood[min_id];
-}
+// }
 
 // void complement(vector<vector<Point>>& geometry)
 // {
@@ -308,7 +308,7 @@ int main()
     //             cout << geometry[i][j].x << " ";
     //         }
     //     }
-    // }
+    }
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
