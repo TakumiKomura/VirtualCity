@@ -125,4 +125,115 @@ int main()
     // start = system_clock::now();
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
+
+ vector<vector<Point>> jgeometry;
+    int min=9999,slow,scol;
+    for(int i=0; i<308; i++){
+        for(int j=0; j<377; j++){
+            jgeometry[i][j]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+     for(int i=0; i<308; i++){
+        for(int j=377; j<754; j++){
+            jgeometry[i][j-377]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=0; i<308; i++){
+        for(int j=754; j<COL; j++){
+            jgeometry[i][j-754]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=308; i<616; i++){
+        for(int j=0; j<377; j++){
+            jgeometry[i-308][j]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=308; i<616; i++){
+        for(int j=377; j<754; j++){
+            jgeometry[i-308][j-377]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=308; i<616; i++){
+        for(int j=754; j<COL; j++){
+            jgeometry[i-308][j-754]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=616; i<ROW; i++){
+        for(int j=0; j<377; j++){
+            jgeometry[i-616][j]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=616; i<ROW; i++){
+        for(int j=377; j<754; j++){
+            jgeometry[i][j-377]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
+    for(int i=616; i<ROW; i++){
+        for(int j=754; j<COL; j++){
+            jgeometry[i][j-754]=geometry[i][j];
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
+            }
+        }
+    }
+    judge(jgeometry,slow,scol,flag);
+    jgeometry.clear();
 }
