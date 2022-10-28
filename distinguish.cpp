@@ -43,11 +43,11 @@ void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-int sgjudge(std::vector<std::vector<Point>> geometry,int& row,int& col,int end[][400]){
+int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[400][400]){
     for(int i=-1; i<2; i++){
                 for(int j=-1; j<2; j++){
                      if(row+i>=0&&col+j>=0){
-                    if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=3.0&&end[row+i][col+j]==0){
+                    if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&end[row+i][col+j]==0){
                     return 0;//まだ探索できる点があった
                     }
                      }
@@ -63,14 +63,14 @@ void gjudge(std::vector<std::vector<Point>> geometry,int& row,int& col,int& n,in
             //隣接点走査
             for(j=-1; j<2; j++){
                 if(row+i>=0&&col+j>=0){
-            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=3.0&&geometry[row+i][col+j].isBuilding!=false){
+            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding==true){
                 //地面判定できる点があった
                 pastrow[n]=row;
                 pastcol[n]=col;//1つ前の行列の添え字
                 n++;
                 row=row+i;//次の点の行列の添え字
                 col=col+j;
-                geometry[row][col].isBuilding=true;//地面であることの更新
+                geometry[row][col].isBuilding=false;//地面であることの更新
                 t=false;
                 return;
             }
@@ -84,7 +84,7 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
     
     int pastrow[400];//1つ前の点の行の添え字
     int pastcol[400];//1つ前の点の列の添え字
-    int end[400][400];//探索済みの印
+    int end[400][400]={0};//探索済みの印
     int row=startrow;//行
     int col=startcol;//列
     int n=0,completed=0;//繰り返し文に必要なフラグ
@@ -94,20 +94,21 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
          if(row==startrow&&col==startcol){//探索地点がスタート地点まで戻った時の処理
             completed=sgjudge(geometry,row,col,end);
          }
-         std::cout << completed;
-         if(completed==1) break;
+         if(completed==1){
+            return;
+         }
          bool t=true;
         gjudge(geometry,row,col,n,pastrow,pastcol,t);
         if(t==true){
             //隣接点を走査したが地面判定された点はなかった時
             end[row][col]=1;//隣接点が地面でないことをすべて確認した印
-            int r=pastrow[n-1];
-            int c=pastcol[n-1];
+            row=pastrow[n-1];
+            col=pastcol[n-1];
             pastrow[n-1]=0;//使用済みの添え字を0にする
             pastcol[n-1]=0;
             n--;
-            judge(geometry,r,c);//1つ前の点に戻って走査を再開する
-            //pastの1番後ろの要素を削除する
+            /*judge(geometry,r,c);//1つ前の点に戻って走査を再開する
+            //pastの1番後ろの要素を削除する*/
         }
     }
 }
@@ -145,7 +146,7 @@ int main()
 
  vector<vector<Point>> jgeometry(ROW,vector<Point>(COL));
     int min=9999,slow,scol;
-    /*for(int i=0; i<308; i++){
+    for(int i=0; i<308; i++){
         for(int j=0; j<377; j++){
             jgeometry[i][j]=geometry[i][j];
             if(jgeometry[i][j].z<min){
@@ -155,15 +156,21 @@ int main()
             }
         }
     }
+    judge(jgeometry,slow,scol);
+    for(int i=0; i<308; i++){
+        for(int j=0; j<377; j++){
+           std::cout << jgeometry[i][j].isBuilding << "\n";
+        }
+    }
     jgeometry.clear();
     return 0;
-     for(int i=0; i<308; i++){
+    /* for(int i=0; i<308; i++){
         for(int j=377; j<754; j++){
             jgeometry[i][j-377]=geometry[i][j];
-            if(jgeometry[i][j-377].z<=min){
-                min=jgeometry[i][j-377].z;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
                 slow=i;
-                scol=j-377;
+                scol=j;
             }
         }
     }
@@ -172,10 +179,10 @@ int main()
     for(int i=0; i<308; i++){
         for(int j=754; j<COL; j++){
             jgeometry[i][j-754]=geometry[i][j];
-            if(jgeometry[i][j-754].z<=min){
-                min=jgeometry[i][j-754].z;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
                 slow=i;
-                scol=j-754;
+                scol=j;
             }
         }
     }
@@ -184,15 +191,15 @@ int main()
     for(int i=308; i<616; i++){
         for(int j=0; j<377; j++){
             jgeometry[i-308][j]=geometry[i][j];
-            if(jgeometry[i-308][j].z<=min){
-                min=jgeometry[i-308][j].z;
-                slow=i-308;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
                 scol=j;
             }
         }
     }
     judge(jgeometry,slow,scol);
-    jgeometry.clear();*/
+    jgeometry.clear();
     for(int i=308; i<616; i++){
         for(int j=377; j<754; j++){
             jgeometry[i-308][j-377]=geometry[i][j];
@@ -204,14 +211,15 @@ int main()
         }
     }
     judge(jgeometry,slow,scol);
+    std::cout << "ok";
     jgeometry.clear();
     /*for(int i=308; i<616; i++){
         for(int j=754; j<COL; j++){
             jgeometry[i-308][j-754]=geometry[i][j];
-            if(jgeometry[i-308][j-754].z<=min){
-                min=jgeometry[i-308][j-754].z;
-                slow=i-308;
-                scol=j-754;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
             }
         }
     }
@@ -220,9 +228,9 @@ int main()
     for(int i=616; i<ROW; i++){
         for(int j=0; j<377; j++){
             jgeometry[i-616][j]=geometry[i][j];
-            if(jgeometry[i-616][j].z<=min){
-                min=jgeometry[i-616][j].z;
-                slow=i-616;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
                 scol=j;
             }
         }
@@ -232,10 +240,10 @@ int main()
     for(int i=616; i<ROW; i++){
         for(int j=377; j<754; j++){
             jgeometry[i-616][j-377]=geometry[i][j];
-            if(jgeometry[i-616][j-377].z<=min){
-                min=jgeometry[i-616][j-377].z;
-                slow=i-616;
-                scol=j-377;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
             }
         }
     }
@@ -244,10 +252,10 @@ int main()
     for(int i=616; i<ROW; i++){
         for(int j=754; j<COL; j++){
             jgeometry[i-616][j-754]=geometry[i][j];
-            if(jgeometry[i-616][j-754].z<=min){
-                min=jgeometry[i-616][j-754].z;
-                slow=i-616;
-                scol=j-754;
+            if(jgeometry[i][j].z<=min){
+                min=jgeometry[i][j].z;
+                slow=i;
+                scol=j;
             }
         }
     }
