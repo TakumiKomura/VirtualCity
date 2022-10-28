@@ -1,4 +1,4 @@
-// compliment lack points
+// complement lack points
 #include<iostream>
 #include<fstream>
 #include<vector>
@@ -104,7 +104,7 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
 }
 
 // write points to file
-void output_complimented(vector<vector<Point>>& geometry, ofstream& file_out)
+void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
 {
     for (int i = 0; i < ROW; ++i)
     {
@@ -117,7 +117,7 @@ void output_complimented(vector<vector<Point>>& geometry, ofstream& file_out)
 
 double calc(double neighbourhood[], int len)
 {
-    double compliment_value = 0;
+    double complement_value = 0;
     int crash_num = 0;
     // 平均値
     // for (int i = 0; i < len; ++i)
@@ -126,9 +126,9 @@ double calc(double neighbourhood[], int len)
     //         ++crash_num;
     //         continue;
     //     }
-    //     compliment_value += neighbourhood[i];
+    //     complement_value += neighbourhood[i];
     // }
-    // return compliment_value / (len - crash_num);
+    // return complement_value / (len - crash_num);
 
     // 平均値に最も近い値
     // for (int i = 0; i < len; ++i)
@@ -136,17 +136,17 @@ double calc(double neighbourhood[], int len)
     //     if(neighbourhood[i] == -9999.99){
     //         ++crash_num;
     //     }
-    //     else{compliment_value += neighbourhood[i];}
+    //     else{complement_value += neighbourhood[i];}
     // }
 
-    // compliment_value /= (len - crash_num);
-    // double min = fabs(compliment_value - neighbourhood[0]);
+    // complement_value /= (len - crash_num);
+    // double min = fabs(complement_value - neighbourhood[0]);
     // int min_id = 0;
 
     // for (int i = 1; i < len; ++i)
     // {
-    //     if(min > fabs(compliment_value - neighbourhood[i])){
-    //         min = fabs(compliment_value - neighbourhood[i]);
+    //     if(min > fabs(complement_value - neighbourhood[i])){
+    //         min = fabs(complement_value - neighbourhood[i]);
     //         min_id = i;
     //     }
     // }
@@ -184,7 +184,7 @@ double calc(double neighbourhood[], int len)
     // return neighbourhood[min_id];
 }
 
-// void compliment(vector<vector<Point>>& geometry)
+// void complement(vector<vector<Point>>& geometry)
 // {
 //     for (int i = 1; i < ROW - 1; ++i)
 //     {
@@ -285,8 +285,8 @@ int main()
         exit(1);
     }
 
-    // string output_path = "250_records_complimented.txt";
-    string output_path = "53394640_dsm_1m_complimented.txt";
+    // string output_path = "250_records_complemented.txt";
+    string output_path = "53394640_dsm_1m_complemented.txt";
 
     ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
     if(!file_out){
@@ -297,7 +297,7 @@ int main()
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
     input_raw(geometry, file_in);
-    output_complimented(geometry, file_out);
+    output_complemented(geometry, file_out);
 
     //どこがずれていたか調べる用
     // for(int i = 0; i < ROW; ++i){
@@ -312,7 +312,7 @@ int main()
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
-    // compliment(geometry);
+    // complement(geometry);
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 

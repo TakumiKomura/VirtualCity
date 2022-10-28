@@ -20,7 +20,7 @@ struct Point{
 };
 
 // read file and strage points as an array
-void input_complimented(vector<vector<Point>>& geometry, ifstream& file_in)
+void input_complemented(vector<vector<Point>>& geometry, ifstream& file_in)
 {   
     for (int i = 0; i < ROW; ++i)
     {
@@ -104,8 +104,8 @@ void judge(std::vector<std::vector<Point>>& geometry,int startrow,int startcol)
 
 int main()
 {
-    // string input_path = "250_records_complimented.txt";
-    string input_path = "53394640_dsm_1m_complimented.txt";
+    // string input_path = "250_records_complemented.txt";
+    string input_path = "53394640_dsm_1m_complemented.txt";
 
     ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
     if(!file_in){
@@ -124,7 +124,7 @@ int main()
 
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
-    input_complimented(geometry, file_in);
+    input_complemented(geometry, file_in);
     output_distinguished(geometry, file_out);
 
     // system_clock::time_point start, end;
