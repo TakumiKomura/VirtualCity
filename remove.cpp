@@ -75,14 +75,14 @@ double median(double val1, double val2, double val3, double val4)
     }
 
     if(big1 > big2)
-        big3 = big1;
+        small3 = big2;
     else
-        big3 = big2;
+        small3 = big1;
     
     if(small1 > small2)
-        small3 = small1;
+        big3 = small1;
     else
-        small3 = small2;
+        big3 = small2;
 
     return (big3 + small3) / 2;
 }
@@ -137,7 +137,7 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
                 removed[count].z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
                                         geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
-                if (num_building == 1){
+                if ((num_building == 0) || (num_building == 1)){
                     removed[count].isBuilding = false;
                 }else{
                     removed[count].isBuilding = true;
