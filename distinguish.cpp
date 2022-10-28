@@ -43,7 +43,7 @@ void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol,std::vector<std::vector<int>> flag)
+void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
 {
     
     int pastrow[10000];//1つ前の点の行の添え字
@@ -70,14 +70,14 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol,st
         for(i=-1; i<2; i++){
             //隣接点走査
             for(j=-1; j<2; j++){
-            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&flag[row+i][col+j]!=0){
+            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding!=false){
                 //地面判定できる点があった
                 pastrow[n]=row;
                 pastcol[n]=col;//1つ前の行列の添え字
                 n++;
                 row=row+i;//次の点の行列の添え字
                 col=col+j;
-                flag[row][col]=0;//地面であることの更新
+                geometry[row][col].isBuilding=0;//地面であることの更新
                 break;
             }
             }
@@ -90,7 +90,7 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol,st
             pastrow[n-1]=0;//使用済みの添え字を0にする
             pastcol[n-1]=0;
             n--;
-            judge(geometry,r,c,flag);//1つ前の点に戻って走査を再開する
+            judge(geometry,r,c);//1つ前の点に戻って走査を再開する
             //pastの1番後ろの要素を削除する
         }
     }
@@ -138,7 +138,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
      for(int i=0; i<308; i++){
         for(int j=377; j<754; j++){
@@ -150,7 +150,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=0; i<308; i++){
         for(int j=754; j<COL; j++){
@@ -162,7 +162,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=308; i<616; i++){
         for(int j=0; j<377; j++){
@@ -174,7 +174,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=308; i<616; i++){
         for(int j=377; j<754; j++){
@@ -186,7 +186,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=308; i<616; i++){
         for(int j=754; j<COL; j++){
@@ -198,7 +198,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=616; i<ROW; i++){
         for(int j=0; j<377; j++){
@@ -210,7 +210,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=616; i<ROW; i++){
         for(int j=377; j<754; j++){
@@ -222,7 +222,7 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
     for(int i=616; i<ROW; i++){
         for(int j=754; j<COL; j++){
@@ -234,6 +234,6 @@ int main()
             }
         }
     }
-    judge(jgeometry,slow,scol,flag);
+    judge(jgeometry,slow,scol);
     jgeometry.clear();
 }
