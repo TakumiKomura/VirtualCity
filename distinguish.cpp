@@ -43,11 +43,14 @@ void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[400][400]){
+int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[400][400],int rowsize,int colsize){
     for(int i=-1; i<2; i++){
                 for(int j=-1; j<2; j++){
-                     if(row+i>=0&&col+j>=0){
-                    if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&end[row+i][col+j]==0){
+                    if(i==0&&j==0){
+                        break;
+                    }
+                    if(row+i>=0&&col+j>=0&&(row+i<rowsize&&col+j<colsize)){
+                    if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=3.0&&end[row+i][col+j]==0){
                     return 0;//まだ探索できる点があった
                     }
                      }
@@ -56,14 +59,14 @@ int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[400
      return 1;
 }
 
-void gjudge(std::vector<std::vector<Point>> geometry,int& row,int& col,int& n,int pastrow[], int pastcol[],bool& t)
+void gjudge(std::vector<std::vector<Point>> geometry,int& row,int& col,int& n,int pastrow[], int pastcol[],bool& t,int rowsize,int colsize)
 {
     int i,j;
     for(i=-1; i<2; i++){
             //隣接点走査
             for(j=-1; j<2; j++){
-                if(row+i>=0&&col+j>=0){
-            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding==true){
+                if((row+i>=0&&col+j>=0)&&(row+i<rowsize&&col+j<colsize)){
+            if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=3.0&&geometry[row+i][col+j].isBuilding==true){
                 //地面判定できる点があった
                 pastrow[n]=row;
                 pastcol[n]=col;//1つ前の行列の添え字
@@ -89,17 +92,19 @@ void judge(std::vector<std::vector<Point>> geometry,int startrow,int startcol)
     int col=startcol;//列
     int n=0,completed=0;//繰り返し文に必要なフラグ
      int i=0,j;/*仮置き*/
+    int rowsize=geometry.size();
+    int colsize=geometry.at(0).size();
     geometry[row][col].isBuilding=false;
     while(completed==0){
          if(row==startrow&&col==startcol){//探索地点がスタート地点まで戻った時の処理
-            completed=sgjudge(geometry,row,col,end);
+            completed=sgjudge(geometry,row,col,end,rowsize,colsize);
          }
          if(completed==1){
             return;
          }
          bool t=true;
-        gjudge(geometry,row,col,n,pastrow,pastcol,t);
-        if(t==true){
+        gjudge(geometry,row,col,n,pastrow,pastcol,t,rowsize,colsize);
+        if((t==true&&n-1>=0)){
             //隣接点を走査したが地面判定された点はなかった時
             end[row][col]=1;//隣接点が地面でないことをすべて確認した印
             row=pastrow[n-1];
@@ -149,7 +154,7 @@ int main()
     for(int i=0; i<308; i++){
         for(int j=0; j<377; j++){
             jgeometry[i][j]=geometry[i][j];
-            if(jgeometry[i][j].z<min){
+            if(jgeometry[i][j].z!=-9999.99&&jgeometry[i][j].z<min){
                 min=jgeometry[i][j].z;
                 slow=i;
                 scol=j;
