@@ -307,6 +307,13 @@ int main()
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
     input_raw(geometry, file_in);
+
+    // system_clock::time_point start, end;
+    // start = system_clock::now();
+    complement(geometry);
+    // end = system_clock::now();
+    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
+
     output_complemented(geometry, file_out);
 
     //どこがずれていたか調べる用
@@ -320,13 +327,8 @@ int main()
     //     }
     //}
 
-    // system_clock::time_point start, end;
-    // start = system_clock::now();
-    complement(geometry);
-    // end = system_clock::now();
-    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
-    // //欠損点がどこか調べる用
+    //欠損点がどこか調べる用
     // for (int i = 0; i < ROW; ++i)
     // {
     //     for (int j = 0; j < COL; ++j)
