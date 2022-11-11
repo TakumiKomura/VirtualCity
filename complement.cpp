@@ -125,20 +125,20 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
     }
 }
 
-// double calc(double neighbourhood[], int len)
-// {
-//     double complement_value = 0;
-//     int crash_num = 0;
-    // 平均値
-    // for (int i = 0; i < len; ++i)
-    // {
-    //     if(neighbourhood[i] == -9999.99){
-    //         ++crash_num;
-    //         continue;
-    //     }
-    //     complement_value += neighbourhood[i];
-    // }
-    // return complement_value / (len - crash_num);
+double calc(double neighbourhood[], int len)
+{
+    double complement_value = 0;
+    int crash_num = 0;
+    //平均値
+    for (int i = 0; i < len; ++i)
+    {
+        if(neighbourhood[i] == -9999.99){
+            ++crash_num;
+            continue;
+        }
+        complement_value += neighbourhood[i];
+    }
+    return complement_value / (len - crash_num);
 
     // 平均値に最も近い値
     // for (int i = 0; i < len; ++i)
@@ -192,97 +192,97 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
     //     }
     // }
     // return neighbourhood[min_id];
-// }
+}
 
-// void complement(vector<vector<Point>>& geometry)
-// {
-//     for (int i = 1; i < ROW - 1; ++i)
-//     {
-//         for (int j = 1; j < COL - 1; ++j)
-//         {
-//             if(geometry[i][j].z == -9999.99){
-//                 // 8近傍
-//                 double neighbourhood[8] = {geometry[i - 1][j - 1].z,
-//                                            geometry[i - 1][j].z,
-//                                            geometry[i - 1][j + 1].z,
-//                                            geometry[i][j - 1].z,
-//                                            geometry[i][j + 1].z,
-//                                            geometry[i + 1][j - 1].z,
-//                                            geometry[i + 1][j].z,
-//                                            geometry[i + 1][j + 1].z};
-//                 geometry[i][j].z = calc(neighbourhood, 8);
-//             }
-//         }
-//     }
-//     for (int i = 1; i < COL - 1; ++i)
-//     {
-//         if(geometry[0][i].z == -9999.99){
-//             double neighbourhood[5] = {geometry[1][i].z,
-//                                        geometry[1][i + 1].z,
-//                                        geometry[0][i + 1].z,
-//                                        geometry[0][i - 1].z,
-//                                        geometry[1][i - 1].z};
-//             geometry[0][i].z = calc(neighbourhood, 5);
-//         }
-//     }
-//     for (int i = 1; i < COL - 1; ++i)
-//     {
-//         if(geometry[ROW - 1][i].z == -9999.99){
-//             double neighbourhood[5] = {geometry[ROW - 2][i].z,
-//                                        geometry[ROW - 2][i + 1].z,
-//                                        geometry[ROW - 2][i - 1].z,
-//                                        geometry[ROW - 1][i - 1].z,
-//                                        geometry[ROW - 1][i + 1].z};
-//             geometry[ROW - 1][i].z = calc(neighbourhood, 5);
-//         }
-//     }
-//     for (int i = 1; i < ROW - 1; ++i)
-//     {
-//         if(geometry[i][0].z == -9999.99){
-//             double neighbourhood[5] = {geometry[i][1].z,
-//                                        geometry[i + 1][1].z,
-//                                        geometry[i - 1][1].z,
-//                                        geometry[i + 1][0].z,
-//                                        geometry[i - 1][0].z};
-//             geometry[i][0].z = calc(neighbourhood, 5);
-//         }
-//     }
-//     for (int i = 1; i < ROW - 1; ++i)
-//     {
-//         if(geometry[i][COL - 1].z == -9999.99){
-//             double neighbourhood[5] = {geometry[i][COL - 2].z,
-//                                        geometry[i + 1][COL - 2].z,
-//                                        geometry[i - 1][COL - 2].z,
-//                                        geometry[i + 1][COL - 1].z,
-//                                        geometry[i - 1][COL - 1].z};
-//             geometry[i][COL - 1].z = calc(neighbourhood, 5);
-//         }
-//     }
-//     if(geometry[0][0].z == -9999.99){
-//         double neighbourhood[3] = {geometry[0][1].z,
-//                                    geometry[1][0].z,
-//                                    geometry[1][1].z};
-//         geometry[0][0].z =calc(neighbourhood, 3);
-//     }
-//     if(geometry[0][COL - 1].z == -9999.99){
-//         double neighbourhood[3] = {geometry[0][COL - 2].z,
-//                                    geometry[1][COL - 2].z,
-//                                    geometry[1][COL - 1].z};
-//         geometry[0][COL - 1].z =calc(neighbourhood, 3);
-//     }
-//     if(geometry[ROW - 1][0].z == -9999.99){
-//         double neighbourhood[3] = {geometry[ROW - 1][1].z,
-//                                    geometry[ROW - 2][0].z,
-//                                    geometry[ROW - 2][1].z};
-//         geometry[ROW - 1][0].z =calc(neighbourhood, 3);
-//     }
-//     if(geometry[ROW - 1][COL - 1].z == -9999.99){
-//         double neighbourhood[3] = {geometry[ROW - 1][COL - 2].z,
-//                                    geometry[ROW - 2][COL - 2].z,
-//                                    geometry[ROW - 2][COL - 1].z};
-//         geometry[ROW - 1][COL - 1].z =calc(neighbourhood, 3);
-//     }
-// }
+void complement(vector<vector<Point>>& geometry)
+{
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        for (int j = 1; j < COL - 1; ++j)
+        {
+            if(geometry[i][j].z == -9999.99){
+                // 8近傍
+                double neighbourhood[8] = {geometry[i - 1][j - 1].z,
+                                           geometry[i - 1][j].z,
+                                           geometry[i - 1][j + 1].z,
+                                           geometry[i][j - 1].z,
+                                           geometry[i][j + 1].z,
+                                           geometry[i + 1][j - 1].z,
+                                           geometry[i + 1][j].z,
+                                           geometry[i + 1][j + 1].z};
+                geometry[i][j].z = calc(neighbourhood, 8);
+            }
+        }
+    }
+    for (int i = 1; i < COL - 1; ++i)
+    {
+        if(geometry[0][i].z == -9999.99){
+            double neighbourhood[5] = {geometry[1][i].z,
+                                       geometry[1][i + 1].z,
+                                       geometry[0][i + 1].z,
+                                       geometry[0][i - 1].z,
+                                       geometry[1][i - 1].z};
+            geometry[0][i].z = calc(neighbourhood, 5);
+        }
+    }
+    for (int i = 1; i < COL - 1; ++i)
+    {
+        if(geometry[ROW - 1][i].z == -9999.99){
+            double neighbourhood[5] = {geometry[ROW - 2][i].z,
+                                       geometry[ROW - 2][i + 1].z,
+                                       geometry[ROW - 2][i - 1].z,
+                                       geometry[ROW - 1][i - 1].z,
+                                       geometry[ROW - 1][i + 1].z};
+            geometry[ROW - 1][i].z = calc(neighbourhood, 5);
+        }
+    }
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        if(geometry[i][0].z == -9999.99){
+            double neighbourhood[5] = {geometry[i][1].z,
+                                       geometry[i + 1][1].z,
+                                       geometry[i - 1][1].z,
+                                       geometry[i + 1][0].z,
+                                       geometry[i - 1][0].z};
+            geometry[i][0].z = calc(neighbourhood, 5);
+        }
+    }
+    for (int i = 1; i < ROW - 1; ++i)
+    {
+        if(geometry[i][COL - 1].z == -9999.99){
+            double neighbourhood[5] = {geometry[i][COL - 2].z,
+                                       geometry[i + 1][COL - 2].z,
+                                       geometry[i - 1][COL - 2].z,
+                                       geometry[i + 1][COL - 1].z,
+                                       geometry[i - 1][COL - 1].z};
+            geometry[i][COL - 1].z = calc(neighbourhood, 5);
+        }
+    }
+    if(geometry[0][0].z == -9999.99){
+        double neighbourhood[3] = {geometry[0][1].z,
+                                   geometry[1][0].z,
+                                   geometry[1][1].z};
+        geometry[0][0].z =calc(neighbourhood, 3);
+    }
+    if(geometry[0][COL - 1].z == -9999.99){
+        double neighbourhood[3] = {geometry[0][COL - 2].z,
+                                   geometry[1][COL - 2].z,
+                                   geometry[1][COL - 1].z};
+        geometry[0][COL - 1].z =calc(neighbourhood, 3);
+    }
+    if(geometry[ROW - 1][0].z == -9999.99){
+        double neighbourhood[3] = {geometry[ROW - 1][1].z,
+                                   geometry[ROW - 2][0].z,
+                                   geometry[ROW - 2][1].z};
+        geometry[ROW - 1][0].z =calc(neighbourhood, 3);
+    }
+    if(geometry[ROW - 1][COL - 1].z == -9999.99){
+        double neighbourhood[3] = {geometry[ROW - 1][COL - 2].z,
+                                   geometry[ROW - 2][COL - 2].z,
+                                   geometry[ROW - 2][COL - 1].z};
+        geometry[ROW - 1][COL - 1].z =calc(neighbourhood, 3);
+    }
+}
 
 int main()
 {
@@ -318,7 +318,7 @@ int main()
     //             cout << geometry[i][j].x << " ";
     //         }
     //     }
-    }
+    //}
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
