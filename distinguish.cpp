@@ -74,6 +74,7 @@ void gjudge(std::vector<std::vector<Point>>& geometry,int& row,int& col,int& n,i
                  saverow.push_back(row);
                  savecol.push_back(col);
                 n++;
+                /*std::cout << geometry[row+i][col+j].z << "\n";*/
                 row=row+i;//次の点の行列の添え字
                 col=col+j;
                 geometry[row][col].isBuilding=false;//地面であることの更新
@@ -120,8 +121,20 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
             end[row][col]=1;//隣接点が地面でないことをすべて確認した印
             row=pastrow[n-1];
             col=pastcol[n-1];
+            /*std::cout << pastrow[n-1] << " " << pastcol[n-1] << " " << n << "\n";*/
             n--;
             //1つ前の点に戻って走査を再開する
+        }
+    }
+}
+
+void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
+{
+    for (int i = 0; i < ROW; ++i)
+    {
+        for (int j = 0; j < COL; ++j)
+        {
+            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << endl;
         }
     }
 }
@@ -171,14 +184,11 @@ int main()
             }
         }
     }
-    a=0,b=0;
     for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i][j]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
 
     for(i=0; i<308; i++){
         for(j=377; j<754; j++){
@@ -193,14 +203,12 @@ int main()
             }
         }
     }
-     a=0,b=0;
-     for(i=0; i<308; i++){
+    for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i][j+377]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
+ 
 
     for(i=0; i<308; i++){
         for(j=754; j<COL; j++){
@@ -215,14 +223,12 @@ int main()
             }
         }
     }
-    a=0,b=0;
-     for(i=0; i<308; i++){
+    for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i][j+754]=jgeometry[i][j];
         }
     }
-   std::cout << a  << " " << b << "\n";
+   
 
     for(i=308; i<615; i++){
         for(j=0; j<377; j++){
@@ -238,14 +244,12 @@ int main()
             }
         }
     }
-     for(i=0; i<307; i++){
+    for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+308][j]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
-    
+      
     for(i=308; i<616; i++){
         for(j=377; j<754; j++){
             jgeometry[i-308][j-377]=geometry[i][j];
@@ -259,15 +263,12 @@ int main()
             }
         }
     }
-    a=0,b=0;
     for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+308][j+377]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
-
+ 
     for(i=308; i<616; i++){
         for(j=754; j<COL; j++){
             jgeometry[i-308][j-754]=geometry[i][j];
@@ -281,14 +282,12 @@ int main()
             }
         }
     }
-    a=0,b=0;
     for(i=0; i<308; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+308][j+754]=jgeometry[i][j];
         }
     }
-   std::cout << a  << " " << b << "\n";
+    
 
    for(i=616; i<ROW; i++){
         for(j=0; j<377; j++){
@@ -303,14 +302,11 @@ int main()
             }
         }
     }
-     a=0,b=0;
-     for(i=0; i<307; i++){
+    for(i=0; i<307; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+616][j]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
 
     for(i=616; i<ROW; i++){
         for(j=377; j<755; j++){
@@ -325,14 +321,12 @@ int main()
             }
         }
     }
-    a=0,b=0;
-     for(i=0; i<307; i++){
+    for(i=0; i<307; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+616][j+377]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
+    
 
     for(i=616; i<ROW; i++){
         for(j=755; j<COL; j++){
@@ -347,13 +341,12 @@ int main()
             }
         }
     }
-    a=0,b=0;
-     for(i=0; i<307; i++){
+    for(i=0; i<307; i++){
         for(j=0; j<377; j++){
-           if(jgeometry[i][j].isBuilding==1) a++;
-           else b++;
+            geometry[i+616][j+755]=jgeometry[i][j];
         }
     }
-    std::cout << a  << " " << b << "\n";
+    // write points to file
+    output_complemented(geometry, file_out);
     return 0;
 }
