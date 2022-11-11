@@ -45,6 +45,9 @@ for line in tri.simplices:
 output_data=input("Enter the output file name ")
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
+    f2.write("Viewpoint{\n")
+    f2.write("\tposition -6984.23 1220.36 -32353.31\n")
+    f2.write("}\n")
     
     #最初に建物から(赤)
     f2.write("Shape{\n")
