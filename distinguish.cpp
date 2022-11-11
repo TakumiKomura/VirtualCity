@@ -164,14 +164,13 @@ int main()
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
     input_complemented(geometry, file_in);
-    output_distinguished(geometry, file_out);
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
- vector<vector<Point>> jgeometry(ROW,vector<Point>(COL));
+    vector<vector<Point>> jgeometry(ROW,vector<Point>(COL));
     int i,j,a,b;
     int end[400][400]={0};//探索済みの印
     for(i=0; i<308; i++){
