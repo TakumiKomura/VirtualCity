@@ -12,6 +12,8 @@
 using namespace std;
 using namespace chrono;
 
+
+
 struct Point{
     double x;
     double y;
@@ -39,7 +41,7 @@ void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
     {
         for (int j = 0; j < COL; ++j)
         {
-            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << endl;
+            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z  << ' ' << geometry[i][j].isBuilding <<  endl;
         }
     }
 }
@@ -128,7 +130,7 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
     }
 }
 
-void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
+/*void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
 {
     for (int i = 0; i < ROW; ++i)
     {
@@ -137,7 +139,7 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
             file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << endl;
         }
     }
-}
+}*/
 
 int main()
 {
@@ -347,6 +349,6 @@ int main()
         }
     }
     // write points to file
-    output_complemented(geometry, file_out);
+    output_distinguished(geometry, file_out);
     return 0;
 }
