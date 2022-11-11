@@ -46,19 +46,19 @@ void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
     }
     for (int i = 0; i < 308; ++i)
     {
-        for (int j = 0; j < 377; ++j)
+        for (int j = 0; j < 377; ++j) //376
         {
             // file_in >> trash->x >> trash->y >> trash->z;
             // file_in >> trash->x >> trash->y >> trash->z;
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 0;
         }
-        for (int j = 377; j < 754; ++j)
+        for (int j = 377; j < 754; ++j) //376, 752
         {
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 1;
         }
-        for (int j = 754; j < COL; ++j)
+        for (int j = 754; j < COL; ++j) //752
         {
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
             geometry[i][j].area = 2;
