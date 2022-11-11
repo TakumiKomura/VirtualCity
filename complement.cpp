@@ -322,7 +322,7 @@ int main()
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
-    // complement(geometry);
+    complement(geometry);
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
