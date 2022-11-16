@@ -30,7 +30,7 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
     {
         for (int j = 0; j < COL; ++j)
         {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
+            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z >> geometry[i][j].isBuilding;
         }
     }
 }
@@ -95,7 +95,8 @@ double closest_to_mean(double val1, double val2, double val3, double val4)
     int min_idx = 0;
     double tmp;
     for (int i = 1; i < 4; i++){
-        if(tmp = fabs(val[i] - mean) < min){
+        tmp = fabs(val[i] - mean);
+        if (tmp < min){
             min = tmp;
             min_idx = i;
         }
@@ -106,9 +107,9 @@ double closest_to_mean(double val1, double val2, double val3, double val4)
 void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
 {
     int count = -1;
-    for (int i = 0; i < ROW; i += 2)
+    for (int i = 0; i < ROW - 1; i += 2)
     {
-        for (int j = 0; j < COL; j += 2)
+        for (int j = 0; j < COL - 1; j += 2)
         {
             count++;
             int num_building = geometry[i][j].isBuilding
@@ -148,6 +149,51 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
     removed.resize(count);
 }
 
+// void remove(vector<vector<Point>>& geometry, ofstream& file_out)
+// {
+//     for (int i = 0; i < ROW - 1; i += 2)
+//     {
+//         for (int j = 0; j < COL - 1; j += 2)
+//         {
+//             Point tmp;
+//             int num_building = geometry[i][j].isBuilding
+//                              + geometry[i][j + 1].isBuilding 
+//                              + geometry[i + 1][j].isBuilding 
+//                              + geometry[i + 1][j + 1].isBuilding;
+//             if (num_building == 2){
+//                 tmp.x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 tmp.y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 tmp.z = _mean(geometry[i][j].z * geometry[i][j].isBuilding,
+//                                         geometry[i][j + 1].z * geometry[i][j + 1].isBuilding, 
+//                                         geometry[i + 1][j].z * geometry[i + 1][j].isBuilding,
+//                                         geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding);
+//                 tmp.isBuilding = true;
+//                 file_out << tmp.x << ' ' << tmp.y << ' ' << tmp.z << ' ' << tmp.isBuilding << endl;
+
+//                 tmp.x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 tmp.y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 tmp.z = _mean(geometry[i][j].z * !geometry[i][j].isBuilding,
+//                                         geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding, 
+//                                         geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding,
+//                                         geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding);
+//                 tmp.isBuilding = false;
+//                 file_out << tmp.x << ' ' << tmp.y << ' ' << tmp.z << ' ' << tmp.isBuilding << endl;
+//             }else{
+//                 tmp.x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 tmp.y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 tmp.z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
+//                                         geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
+//                 if ((num_building == 0) || (num_building == 1)){
+//                     tmp.isBuilding = false;
+//                 }else{
+//                     tmp.isBuilding = true;
+//                 }
+//                 file_out << tmp.x << ' ' << tmp.y << ' ' << tmp.z << ' ' << tmp.isBuilding << endl;
+//             }
+//         }
+//     }
+// }
+
 int main()
 {
     // string input_path = "250_records_distinguished.txt";
@@ -173,6 +219,7 @@ int main()
     removed.resize(ROW * COL);
 
     input_distinguished(geometry, file_in);
+    // remove(geometry, file_out);
     remove(geometry, removed);
     output_removed(removed, file_out);
 
