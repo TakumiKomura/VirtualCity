@@ -172,7 +172,7 @@ int main()
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
  vector<vector<Point>> jgeometry(308,vector<Point>(377));
-    int i,j,a,b;
+    int i,j;
     int end[310][380]={0};//探索済みの印
     for(i=0; i<308; i++){
         for(j=0; j<377; j++){
@@ -243,7 +243,6 @@ int main()
             jgeometry[i-308][j]=geometry[i][j];
         }
     }
-    a=0,b=0;
      for(i=0; i<310; i++){
         for(j=0; j<380; j++){
             end[i][j]=0;
