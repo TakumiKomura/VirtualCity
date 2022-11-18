@@ -185,7 +185,6 @@ int main()
     int srow=0,scol=0;//どこまで行列を使用したか(geometryからjgeometryへの代入操作時に必要)
     double sumz=0,summ=0;
     vector<vector<Point>> jgeometry(nrow+arow,vector<Point>(ncol+acol));
-    /*vector<double> sort_geometry((nrow+arow)*(ncol+acol),0);*/
     for(k=0; k<n; k++){
         if(k==n-1) p_n_row+=arow;
         for(l=0; l<n; l++){
@@ -205,9 +204,6 @@ int main()
                         sr++;
                     }
     }
-
-    //ソート
-    /*sort(sort_geometry.begin(),sort_geometry.end());*/
 
     //上限値の決定
     if(av_sr!=0){
