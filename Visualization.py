@@ -105,7 +105,6 @@ with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("\t}\n")
     f2.write("\tgeometry IndexedFaceSet{\n")
     #f2.write("\t\tsolid FALSE\n")
-    f2.write("\t\tcoord Coordinate{\n")
     f2.write("\t\tcoord USE Coord\n")
     f2.write("\t\t\tcoordIndex[\n")
     for point2 in points_ground:
