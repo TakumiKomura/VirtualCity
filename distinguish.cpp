@@ -5,6 +5,7 @@
 #include<vector>
 #include<chrono>
 #include<memory>
+#include<algorithm>
 
 #define ROW 923
 #define COL 1131
@@ -49,7 +50,7 @@ int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[310
                 for(int j=-1; j<2; j++){
                     if(row+i>=0&&col+j>=0&&(row+i<rowsize&&col+j<colsize)){
                        if(i==0&&j==0){
-                    }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=1.5&&end[row+i][col+j]==0&&geometry[row+i][col+j].z<=gmax){
+                    }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&end[row+i][col+j]==0&&geometry[row+i][col+j].z<=gmax){
                     return 0;//まだ探索できる点があった
                     }else{
                     }
@@ -67,7 +68,7 @@ void gjudge(std::vector<std::vector<Point>>& geometry,int& row,int& col,int& n,s
             for(j=-1; j<2; j++){
                 if((row+i>=0&&col+j>=0)&&(row+i<rowsize&&col+j<colsize)){
             if(i==0&&j==0){
-            }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=1.5&&geometry[row+i][col+j].isBuilding==true&&geometry[row+i][col+j].z<=gmax){
+            }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding==true&&geometry[row+i][col+j].z<=gmax){
                 //地面判定できる点があった
                  pastrow.push_back(row);
                  pastcol.push_back(col);//1つ前の行列の添え字
@@ -107,7 +108,7 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
          }
          if(completed==1){
             int k=savecol.size();
-            if(k<500){
+            if(k<1000){
                 for(int i=0; i<k; i++){
                     jgeometry[saverow[i]][savecol[i]].isBuilding=true;
                 }
@@ -152,8 +153,8 @@ int main()
         exit(1);
     }
 
-    // string output_path = "250_records_distinguished.txt";
-    string output_path = "250_records_distinguished.txt";
+    // string output_path = "53394640_dsm_1m_distinguished.txt";
+    string output_path = "53394640_dsm_1m_distinguished.txt";
 
     ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
     if(!file_out){
@@ -164,218 +165,83 @@ int main()
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
     input_complemented(geometry, file_in);
-    /*output_distinguished(geometry, file_out);*/
 
     // system_clock::time_point start, end;
     // start = system_clock::now();
     // end = system_clock::now();
     // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
 
- vector<vector<Point>> jgeometry(308,vector<Point>(377));
-    int i,j;
     int end[310][380]={0};//探索済みの印
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            jgeometry[i][j]=geometry[i][j];
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=25&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,308,377,25,end);
-            }
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i][j]=jgeometry[i][j];
-        }
-    }
-
-    for(i=0; i<308; i++){
-        for(j=377; j<754; j++){
-            jgeometry[i][j-377]=geometry[i][j];
-        }
-    }
-    for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=17&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,308,377,17,end);
-            }
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i][j+377]=jgeometry[i][j];
-        }
-    }
-    
-    for(i=0; i<308; i++){
-        for(j=754; j<COL; j++){
-            jgeometry[i][j-754]=geometry[i][j];
-        }
-    }
-    for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=23&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,308,377,23,end);
-            }
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i][j+754]=jgeometry[i][j];
-        }
+ //ここでエリアの行数と列数を求める
+    int row,col;
+    row=geometry.size();//行数の取得
+    col=geometry.at(0).size();//列数の取得
+    int i,j,k,l,n=3,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
+    int nrow=row/n;//行数を均等に分割
+    int ncol=col/n;//列数を均等に分割
+    int arow=row%n;//あまり
+    int acol=col%n;//あまり
+    int p_n_row=nrow,p_n_col=ncol;//現在いるエリアの列数,行数
+    int srow=0,scol=0;//どこまで行列を使用したか(geometryからjgeometryへの代入操作時に必要)
+    double sumz=0,summ=0;
+    vector<vector<Point>> jgeometry(nrow+arow,vector<Point>(ncol+acol));
+    /*vector<double> sort_geometry((nrow+arow)*(ncol+acol),0);*/
+    for(k=0; k<n; k++){
+        if(k==n-1) p_n_row+=arow;
+        for(l=0; l<n; l++){
+             if(l==n-1) p_n_col+=acol;
+             for(i=0; i<p_n_row; i++){
+                    for(j=0; j<p_n_col; j++){
+                        jgeometry[i][j]=geometry[i+srow][j+scol];
+                        /*sort_geometry[sr]=geometry[i+srow][j+scol].z;*/
+                        if(geometry[i+srow][j+scol].z<=15&&geometry[i+srow][j+scol].z>5){
+                        summ+=geometry[i+srow][j+scol].z;
+                        av_sm++;
+                        }
+                        if(geometry[i+srow][j+scol].z<=25&&geometry[i+srow][j+scol].z>15){
+                        sumz+=geometry[i+srow][j+scol].z;
+                        av_sr++;
+                        }
+                        sr++;
+                    }
     }
 
-    for(i=308; i<615; i++){
-        for(j=0; j<377; j++){
-            jgeometry[i-308][j]=geometry[i][j];
-        }
-    }
-     for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=23&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,307,377,23,end);
-            }
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i+308][j]=jgeometry[i][j];
-        }
-    }
-    
-    for(i=308; i<616; i++){
-        for(j=377; j<754; j++){
-            jgeometry[i-308][j-377]=geometry[i][j];
-        }
-    }
-    for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=23&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,308,377,23,end);
-            }
-        }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i+308][j+377]=jgeometry[i][j];
-        }
-    }
+    //ソート
+    /*sort(sort_geometry.begin(),sort_geometry.end());*/
 
-    for(i=308; i<616; i++){
-        for(j=754; j<COL; j++){
-            jgeometry[i-308][j-754]=geometry[i][j];
-        }
+    //上限値の決定
+    if(av_sr!=0){
+        limit=sumz/av_sr+5;
     }
-    for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
+    else{
+        limit=summ/av_sm+5;
     }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=25&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,308,377,25,end);
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                end[i][j]=0;
             }
         }
-    }
-    for(i=0; i<308; i++){
-        for(j=0; j<377; j++){
-            geometry[i+308][j+754]=jgeometry[i][j];
-        }
-    }
-
-   for(i=616; i<ROW; i++){
-        for(j=0; j<377; j++){
-            jgeometry[i-616][j]=geometry[i][j];
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                if(jgeometry[i][j].z<=limit&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
+                    judge(jgeometry,i,j,p_n_row,p_n_col,limit,end);
+                }
             }
         }
-   for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=25&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,307,377,25,end);
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                geometry[i+srow][j+scol]=jgeometry[i][j];
             }
         }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            geometry[i+616][j]=jgeometry[i][j];
-        }
-    }
-    
-    for(i=616; i<ROW; i++){
-        for(j=377; j<754; j++){
-            jgeometry[i-616][j-377]=geometry[i][j];
-        }
-    }
-     for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=15&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,307,377,15,end);
+            scol+=p_n_col;
+            sr=0;
+            sumz=0;
+            summ=0;
+            av_sr=0;
+            av_sm=0;
             }
+            scol=0;
+            srow+=p_n_row;
         }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            geometry[i+616][j+377]=jgeometry[i][j];
-        }
-    }
-
-    for(i=616; i<ROW; i++){
-        for(j=754; j<COL; j++){
-            jgeometry[i-616][j-754]=geometry[i][j];
-        }
-    }
-   for(i=0; i<310; i++){
-        for(j=0; j<380; j++){
-            end[i][j]=0;
-        }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            if(jgeometry[i][j].z<=25&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
-                judge(jgeometry,i,j,307,377,25,end);
-            }
-        }
-    }
-    for(i=0; i<307; i++){
-        for(j=0; j<377; j++){
-            geometry[i+616][j+754]=jgeometry[i][j];
-        }
-    }
-    // write points to file
-    output_distinguished(geometry, file_out);
-    return 0;
+        output_distinguished(geometry, file_out);
 }
