@@ -239,9 +239,11 @@ int main()
             summ=0;
             av_sr=0;
             av_sm=0;
+            if(l==n-1) p_n_col-=acol;
             }
             scol=0;
             srow+=p_n_row;
+            if(k==n-1) p_n_row-=arow;
         }
         output_distinguished(geometry, file_out);
 }
