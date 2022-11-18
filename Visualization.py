@@ -37,7 +37,10 @@ for line in tri.simplices:
         points_ground.append([line[0],line[1],line[2]])
     else:
         points_building.append([line[0],line[1],line[2]])
-        
+    
+for point in points:
+    point[1]=-point[1]
+    
 #print(points_ground)
 #print(points_building)
 
@@ -46,7 +49,7 @@ output_data=input("Enter the output file name ")
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
     f2.write("Viewpoint{\n")
-    f2.write("\tposition -6984.23 1220.36 -32353.31\n")
+    f2.write("\tposition -6984.23 1220.36 35000.31\n")
     f2.write("}\n")
     
     #最初に建物から(赤)
@@ -58,7 +61,7 @@ with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("\t}\n")
     f2.write("\tgeometry IndexedFaceSet{\n")
     #f2.write("\t\tsolid FALSE\n")
-    f2.write("\t\tcoord Coordinate{\n")
+    f2.write("\t\tcoord DEF Coord Coordinate{\n")
     f2.write("\t\t\tpoint[\n")
     for point1 in points:
         point1=list(map(str,point1))
@@ -103,19 +106,7 @@ with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("\tgeometry IndexedFaceSet{\n")
     #f2.write("\t\tsolid FALSE\n")
     f2.write("\t\tcoord Coordinate{\n")
-    f2.write("\t\t\tpoint[\n")
-    for point1 in points:
-        point1=list(map(str,point1))
-        f2.write("\t\t\t\t")
-        f2.write(point1[0])
-        f2.write(" ")
-        f2.write(point1[2])
-        f2.write(" ")
-        f2.write(point1[1])
-        f2.write(",\n")
-        
-    f2.write("\t\t\t]\n")
-    f2.write("\t\t}\n")
+    f2.write("\t\tcoord USE Coord\n")
     f2.write("\t\t\tcoordIndex[\n")
     for point2 in points_ground:
         point2=list(map(str,point2))
