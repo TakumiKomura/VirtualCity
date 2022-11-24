@@ -11,7 +11,7 @@ def outer_product_z(pt1,pt2,pt3):
     
 
 #ファイルの読み込み(データはリストで管理)
-file_data=input("Enter the File name\n")
+file_data="53394640_dsm_1m_removed.txt"
 points=[]
 with open(file_data) as f:
     lines=f.readlines()
@@ -19,16 +19,23 @@ with open(file_data) as f:
         pnt=line.split()
         points.append([float(pnt[0]),float(pnt[1]),float(pnt[2]),int(pnt[3])])
     
-#print(point)
+#外側に点を追加(判定は地面判定)
+for i in range(929):
+    points.append([float(-7541),float(-33280+i),float(-0.5),int(0)])
+    points.append([float(-6406),float(-33280+i),float(-0.5),int(0)])
 
+for i in range(1,1135):
+    points.append([float(-7541+i),float(-32352),float(-0.5),int(0)])
+    points.append([float(-7541+i),float(-33280),float(-0.5),int(0)])
+
+#三角形分割
 point_delaunay=[]
 for i in range(len(points)):
     point_delaunay.append([points[i][0],points[i][1]])
 
 points_delaunay_2=np.array(point_delaunay)
 tri=Delaunay(points_delaunay_2)
-#print(points_delaunay_2)
-#print(tri.simplices)
+
 
 points_ground=[]
 points_building=[]
@@ -123,7 +130,36 @@ with open(output_data,'w',encoding="utf_8") as f2:
             f2.write(point2[2])
             f2.write(",-1\n")
     f2.write("\t\t\t\t]\n")
+    f2.write("\t}\n")
+    f2.write("}\n")
     
+    #最後に3D出力用の土台を
+    f2.write("Shape{\n")
+    f2.write("\tappearance Appearance{\n")
+    f2.write("\t\tmaterial Material{\n")
+    f2.write("\t\t\tdiffuseColor 0 1 0\n")
+    f2.write("\t\t}\n")
+    f2.write("\t}\n")
+    f2.write("\tgeometry IndexedFaceSet{\n")
+    f2.write("\t\tcoord Coordinate{\n")
+    f2.write("\t\t\tpoint[\n")
+    f2.write("\t\t\t\t-7541 -0.5 33280,\n")
+    f2.write("\t\t\t\t-7541 -0.5 32352,\n")
+    f2.write("\t\t\t\t-6406 -0.5 32352,\n")
+    f2.write("\t\t\t\t-6406 -0.5 33280,\n")
+    f2.write("\t\t\t\t-7541 -5.5 33280,\n")
+    f2.write("\t\t\t\t-7541 -5.5 32352,\n")
+    f2.write("\t\t\t\t-6406 -5.5 32352,\n")
+    f2.write("\t\t\t\t-6406 -5.5 33280,\n")
+    f2.write("\t\t\t]\n")
+    f2.write("\t\t}\n")
+    f2.write("\t\t\tcoordIndex[\n")
+    f2.write("\t\t\t\t0,1,5,4,-1\n")
+    f2.write("\t\t\t\t1,2,6,5,-1\n")
+    f2.write("\t\t\t\t2,3,7,6,-1\n")
+    f2.write("\t\t\t\t3,0,4,7,-1\n")
+    f2.write("\t\t\t\t4,5,6,7,-1\n")
+    f2.write("\t\t\t]\n")
     f2.write("\t}\n")
     f2.write("}\n")
     
