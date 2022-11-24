@@ -144,7 +144,6 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
 
 int main()
 {
-    // string input_path = "250_records_complemented.txt";
     string input_path = "53394640_dsm_1m_complemented.txt";
 
     ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
@@ -153,7 +152,6 @@ int main()
         exit(1);
     }
 
-    // string output_path = "53394640_dsm_1m_distinguished.txt";
     string output_path = "53394640_dsm_1m_distinguished.txt";
 
     ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
