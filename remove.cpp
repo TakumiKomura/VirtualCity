@@ -46,7 +46,7 @@ void output_removed(vector<Point>& removed, ofstream& file_out)
             vertical.x = removed[i].x;
             vertical.y = removed[i].y;
             vertical.z = -1;
-            vertical.isBuilding = true;
+            vertical.isBuilding = false;
             removed.push_back(vertical);
         }
     }
