@@ -38,6 +38,19 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
 // write points to file
 void output_removed(vector<Point>& removed, ofstream& file_out)
 {
+    int n = int(removed.size());
+    for (int i = 0; i < n; ++i)
+    {
+        if(removed[i].isBuilding == true){
+            Point vertical;
+            vertical.x = removed[i].x;
+            vertical.y = removed[i].y;
+            vertical.z = -1;
+            vertical.isBuilding = true;
+            removed.push_back(vertical);
+        }
+    }
+
     for (int i = 0; i < int(removed.size()); ++i)
     {
         file_out << removed[i].x << ' ' << removed[i].y << ' ' << removed[i].z << ' ' << removed[i].isBuilding << endl;
