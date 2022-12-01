@@ -6,9 +6,6 @@
 #include<cmath>
 #include<algorithm>
 
-// #define ROW 5 
-// #define COL 50
-
 #define ROW 923
 #define COL 1131
 
@@ -39,17 +36,17 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
 void output_removed(vector<Point>& removed, ofstream& file_out)
 {
     int n = int(removed.size());
-    for (int i = 0; i < n; ++i)
-    {
-        if(removed[i].isBuilding == true){
-            Point vertical;
-            vertical.x = removed[i].x;
-            vertical.y = removed[i].y;
-            vertical.z = -1;
-            vertical.isBuilding = false;
-            removed.push_back(vertical);
-        }
-    }
+    // for (int i = 0; i < n; ++i)
+    // {
+    //     if(removed[i].isBuilding == true){
+    //         Point vertical;
+    //         vertical.x = removed[i].x;
+    //         vertical.y = removed[i].y;
+    //         vertical.z = -1;
+    //         vertical.isBuilding = false;
+    //         removed.push_back(vertical);
+    //     }
+    // }
 
     for (int i = 0; i < int(removed.size()); ++i)
     {
@@ -117,51 +114,53 @@ double closest_to_mean(double val1, double val2, double val3, double val4)
     return val[min_idx];
 }
 
-void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
-{
-    int count = -1;
-    for (int i = 0; i < ROW - 1; i += 2)
-    {
-        for (int j = 0; j < COL - 1; j += 2)
-        {
-            count++;
-            int num_building = geometry[i][j].isBuilding
-                             + geometry[i][j + 1].isBuilding 
-                             + geometry[i + 1][j].isBuilding 
-                             + geometry[i + 1][j + 1].isBuilding;
-            if (num_building == 2){
-                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
-                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                removed[count].z = _mean(geometry[i][j].z * geometry[i][j].isBuilding,
-                                        geometry[i][j + 1].z * geometry[i][j + 1].isBuilding, 
-                                        geometry[i + 1][j].z * geometry[i + 1][j].isBuilding,
-                                        geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding);
-                removed[count].isBuilding = true;
+// from 4 points to 1 point or 2 ponits
+// void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+// {
+//     int count = -1;
+//     for (int i = 0; i < ROW - 1; i += 2)
+//     {
+//         for (int j = 0; j < COL - 1; j += 2)
+//         {
+//             count++;
+//             int num_building = geometry[i][j].isBuilding
+//                              + geometry[i][j + 1].isBuilding 
+//                              + geometry[i + 1][j].isBuilding 
+//                              + geometry[i + 1][j + 1].isBuilding;
+//             if (num_building == 2){
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 removed[count].z = _mean(geometry[i][j].z * geometry[i][j].isBuilding,
+//                                         geometry[i][j + 1].z * geometry[i][j + 1].isBuilding, 
+//                                         geometry[i + 1][j].z * geometry[i + 1][j].isBuilding,
+//                                         geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding);
+//                 removed[count].isBuilding = true;
 
-                count++;
-                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
-                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                removed[count].z = _mean(geometry[i][j].z * !geometry[i][j].isBuilding,
-                                        geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding, 
-                                        geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding,
-                                        geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding);
-                removed[count].isBuilding = false;
-            }else{
-                removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
-                removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
-                removed[count].z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
-                                        geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
-                if ((num_building == 0) || (num_building == 1)){
-                    removed[count].isBuilding = false;
-                }else{
-                    removed[count].isBuilding = true;
-                }
-            }
-        }
-    }
-    removed.resize(count);
-}
+//                 count++;
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 removed[count].z = _mean(geometry[i][j].z * !geometry[i][j].isBuilding,
+//                                         geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding, 
+//                                         geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding,
+//                                         geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding);
+//                 removed[count].isBuilding = false;
+//             }else{
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
+//                 removed[count].z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
+//                                         geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
+//                 if (num_building <= 1){
+//                     removed[count].isBuilding = false;
+//                 }else{
+//                     removed[count].isBuilding = true;
+//                 }
+//             }
+//         }
+//     }
+//     removed.resize(count);
+// }
 
+// 削減後のpointを作成した時点でfileに書き出す
 // void remove(vector<vector<Point>>& geometry, ofstream& file_out)
 // {
 //     for (int i = 0; i < ROW - 1; i += 2)
@@ -196,7 +195,7 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
 //                 tmp.y = (geometry[i][j].y + geometry[i + 1][j].y) / 2;
 //                 tmp.z = mean(geometry[i][j].z, geometry[i][j + 1].z, 
 //                                         geometry[i + 1][j].z, geometry[i + 1][j + 1].z);
-//                 if ((num_building == 0) || (num_building == 1)){
+//                 if (num_building <= 1){
 //                     tmp.isBuilding = false;
 //                 }else{
 //                     tmp.isBuilding = true;
@@ -206,6 +205,349 @@ void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
 //         }
 //     }
 // }
+
+// from 9 points to 1 point
+// void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+// {
+//     int count = -1;
+//     for (int i = 0; i < ROW - 2; i += 3) // ROW - k + 1; i += k
+//     {
+//         for (int j = 0; j < COL - 2; j += 3) // COL - k + 1; i += k
+//         {
+//             count++;
+//             int num_building = geometry[i][j].isBuilding
+//                              + geometry[i][j + 1].isBuilding 
+//                              + geometry[i][j + 2].isBuilding 
+//                              + geometry[i + 1][j].isBuilding 
+//                              + geometry[i + 1][j + 1].isBuilding
+//                              + geometry[i + 1][j + 2].isBuilding
+//                              + geometry[i + 2][j].isBuilding
+//                              + geometry[i + 2][j + 1].isBuilding
+//                              + geometry[i + 2][j + 2].isBuilding;
+
+//             removed[count].x = geometry[i + 1][j + 1].x;
+//             removed[count].y = geometry[i + 1][j + 1].y;
+//             removed[count].z = (geometry[i][j].z
+//                             + geometry[i][j + 1].z 
+//                             + geometry[i][j + 2].z 
+//                             + geometry[i + 1][j].z 
+//                             + geometry[i + 1][j + 1].z
+//                             + geometry[i + 1][j + 2].z
+//                             + geometry[i + 2][j].z
+//                             + geometry[i + 2][j + 1].z
+//                             + geometry[i + 2][j + 2].z)/9.0; // 9 点の平均値
+//             if (num_building >= 5){
+//                 // removed[count].z = (geometry[i][j].z * geometry[i][j].isBuilding
+//                 //              + geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+//                 //              + geometry[i][j + 2].z * geometry[i][j + 2].isBuilding
+//                 //              + geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+//                 //              + geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+//                 //              + geometry[i + 1][j + 2].z * geometry[i + 1][j + 2].isBuilding
+//                 //              + geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+//                 //              + geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding
+//                 //              + geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding)/num_building; // 建物点の平均値
+//                 removed[count].isBuilding = true;
+//             }else{
+//                 // removed[count].z = (geometry[i][j].z * !geometry[i][j].isBuilding
+//                 //              + geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+//                 //              + geometry[i][j + 2].z * !geometry[i][j + 2].isBuilding
+//                 //              + geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+//                 //              + geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+//                 //              + geometry[i + 1][j + 2].z * !geometry[i + 1][j + 2].isBuilding
+//                 //              + geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+//                 //              + geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding
+//                 //              + geometry[i + 2][j + 2].z * !geometry[i + 2][j + 2].isBuilding)/(double)(9 - num_building); // 地面点の平均値
+//                 removed[count].isBuilding = false;
+//             }
+//         }
+//     }
+//     removed.resize(count);
+// }
+
+// 2 * 3 filter -> 1 point or 2 points 
+// void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+// {
+//     int count = -1;
+//     for (int i = 0; i < ROW - 2; i += 3) // ROW - k + 1; i += k
+//     {
+//         for (int j = 0; j < COL - 1; j += 2) // COL - k + 1; i += k
+//         {
+//             count++;
+//             int num_building = geometry[i][j].isBuilding
+//                              + geometry[i][j + 1].isBuilding 
+//                              + geometry[i + 1][j].isBuilding 
+//                              + geometry[i + 1][j + 1].isBuilding
+//                              + geometry[i + 2][j].isBuilding
+//                              + geometry[i + 2][j + 1].isBuilding;
+            
+//             if(num_building == 3){
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = geometry[i + 1][j + 1].y;
+//                 removed[count].z = (geometry[i][j].z * geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+//                                     +geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding)/(double)num_building;
+//                 removed[count].isBuilding = true;
+
+//                 count++;
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = geometry[i + 1][j + 1].y;
+//                 removed[count].z = (geometry[i][j].z * !geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+//                                     +geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding)/(double)num_building;
+//                 removed[count].isBuilding = false;
+//             }else{
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 1].x) / 2;
+//                 removed[count].y = geometry[i + 1][j + 1].y;
+//                 removed[count].z = (geometry[i][j].z
+//                                 + geometry[i][j + 1].z 
+//                                 + geometry[i + 1][j].z 
+//                                 + geometry[i + 1][j + 1].z
+//                                 + geometry[i + 2][j].z
+//                                 + geometry[i + 2][j + 1].z)/6.0; // 6 点の平均値
+//                 if (num_building >= 4){
+//                     // removed[count].z = (geometry[i][j].z * geometry[i][j].isBuilding
+//                     //             + geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+//                     //             + geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+//                     //             + geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+//                     //             + geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+//                     //             + geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding)/num_building; // 建物点の平均値
+//                     removed[count].isBuilding = true;
+//                 }else if(num_building <= 2){
+//                     // removed[count].z = (geometry[i][j].z * !geometry[i][j].isBuilding
+//                     //             + geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+//                     //             + geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+//                     //             + geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+//                     //             + geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+//                     //             + geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding)/(double)(6 - num_building); // 地面点の平均値
+//                     removed[count].isBuilding = false;
+//                 }
+//             }
+//         }
+//     }
+//     removed.resize(count);
+// }
+
+// from 16 points to 1 point or 2 ponits
+// void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+// {
+//     int count = -1;
+//     for (int i = 0; i < ROW - 3; i += 4)
+//     {
+//         for (int j = 0; j < COL - 3; j += 4)
+//         {
+//             count++;
+//             int num_building = geometry[i][j].isBuilding
+//                              + geometry[i][j + 1].isBuilding 
+//                              + geometry[i][j + 2].isBuilding 
+//                              + geometry[i][j + 3].isBuilding 
+//                              + geometry[i + 1][j].isBuilding 
+//                              + geometry[i + 1][j + 1].isBuilding
+//                              + geometry[i + 1][j + 2].isBuilding
+//                              + geometry[i + 1][j + 3].isBuilding
+//                              + geometry[i + 2][j].isBuilding 
+//                              + geometry[i + 2][j + 1].isBuilding
+//                              + geometry[i + 2][j + 2].isBuilding
+//                              + geometry[i + 2][j + 3].isBuilding
+//                              + geometry[i + 3][j].isBuilding 
+//                              + geometry[i + 3][j + 1].isBuilding
+//                              + geometry[i + 3][j + 2].isBuilding
+//                              + geometry[i + 3][j + 3].isBuilding 
+//                             ;
+//             if (num_building == 8){
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 3].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 3][j].y) / 2;
+//                 removed[count].z = (geometry[i][j].z * geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+//                                     +geometry[i][j + 2].z * geometry[i][j + 2].isBuilding
+//                                     +geometry[i][j + 3].z * geometry[i][j + 3].isBuilding
+//                                     +geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 1][j + 2].z * geometry[i + 1][j + 2].isBuilding
+//                                     +geometry[i + 1][j + 3].z * geometry[i + 1][j + 3].isBuilding
+//                                     +geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding
+//                                     +geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding
+//                                     +geometry[i + 2][j + 3].z * geometry[i + 2][j + 3].isBuilding
+//                                     +geometry[i + 3][j].z * geometry[i + 3][j].isBuilding
+//                                     +geometry[i + 3][j + 1].z * geometry[i + 3][j + 1].isBuilding
+//                                     +geometry[i + 3][j + 2].z * geometry[i + 3][j + 2].isBuilding
+//                                     +geometry[i + 3][j + 3].z * geometry[i + 3][j + 3].isBuilding)/(double)num_building;
+//                 removed[count].isBuilding = true;
+
+//                 count++;
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 3].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 3][j].y) / 2;
+//                 removed[count].z = (geometry[i][j].z * !geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+//                                     +geometry[i][j + 2].z * !geometry[i][j + 2].isBuilding
+//                                     +geometry[i][j + 3].z * !geometry[i][j + 3].isBuilding
+//                                     +geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 1][j + 2].z * !geometry[i + 1][j + 2].isBuilding
+//                                     +geometry[i + 1][j + 3].z * !geometry[i + 1][j + 3].isBuilding
+//                                     +geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding
+//                                     +geometry[i + 2][j + 2].z * !geometry[i + 2][j + 2].isBuilding
+//                                     +geometry[i + 2][j + 3].z * !geometry[i + 2][j + 3].isBuilding
+//                                     +geometry[i + 3][j].z * !geometry[i + 3][j].isBuilding
+//                                     +geometry[i + 3][j + 1].z * !geometry[i + 3][j + 1].isBuilding
+//                                     +geometry[i + 3][j + 2].z * !geometry[i + 3][j + 2].isBuilding
+//                                     +geometry[i + 3][j + 3].z * !geometry[i + 3][j + 3].isBuilding)/(double)num_building;
+//                 removed[count].isBuilding = false;
+//             }else{
+//                 removed[count].x = (geometry[i][j].x + geometry[i][j + 3].x) / 2;
+//                 removed[count].y = (geometry[i][j].y + geometry[i + 3][j].y) / 2;
+//                 if (num_building >= 9){
+//                     removed[count].z = (geometry[i][j].z * geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+//                                     +geometry[i][j + 2].z * geometry[i][j + 2].isBuilding
+//                                     +geometry[i][j + 3].z * geometry[i][j + 3].isBuilding
+//                                     +geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 1][j + 2].z * geometry[i + 1][j + 2].isBuilding
+//                                     +geometry[i + 1][j + 3].z * geometry[i + 1][j + 3].isBuilding
+//                                     +geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding
+//                                     +geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding
+//                                     +geometry[i + 2][j + 3].z * geometry[i + 2][j + 3].isBuilding
+//                                     +geometry[i + 3][j].z * geometry[i + 3][j].isBuilding
+//                                     +geometry[i + 3][j + 1].z * geometry[i + 3][j + 1].isBuilding
+//                                     +geometry[i + 3][j + 2].z * geometry[i + 3][j + 2].isBuilding
+//                                     +geometry[i + 3][j + 3].z * geometry[i + 3][j + 3].isBuilding)/(double)num_building;
+//                     removed[count].isBuilding = true;
+//                 }else{
+//                     removed[count].z = (geometry[i][j].z * !geometry[i][j].isBuilding
+//                                     +geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+//                                     +geometry[i][j + 2].z * !geometry[i][j + 2].isBuilding
+//                                     +geometry[i][j + 3].z * !geometry[i][j + 3].isBuilding
+//                                     +geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+//                                     +geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+//                                     +geometry[i + 1][j + 2].z * !geometry[i + 1][j + 2].isBuilding
+//                                     +geometry[i + 1][j + 3].z * !geometry[i + 1][j + 3].isBuilding
+//                                     +geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+//                                     +geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding
+//                                     +geometry[i + 2][j + 2].z * !geometry[i + 2][j + 2].isBuilding
+//                                     +geometry[i + 2][j + 3].z * !geometry[i + 2][j + 3].isBuilding
+//                                     +geometry[i + 3][j].z * !geometry[i + 3][j].isBuilding
+//                                     +geometry[i + 3][j + 1].z * !geometry[i + 3][j + 1].isBuilding
+//                                     +geometry[i + 3][j + 2].z * !geometry[i + 3][j + 2].isBuilding
+//                                     +geometry[i + 3][j + 3].z * !geometry[i + 3][j + 3].isBuilding)/(double)(16 - num_building);
+//                     removed[count].isBuilding = false;
+//                 }
+//             }
+//         }
+//     }
+//     removed.resize(count);
+// }
+
+// from 25 points to 1 point
+void remove(vector<vector<Point>>& geometry, vector<Point>& removed)
+{
+    int count = -1;
+    for (int i = 0; i < ROW - 4; i += 5) // ROW - k + 1; i += k
+    {
+        for (int j = 0; j < COL - 4; j += 5) // COL - k + 1; i += k
+        {
+            count++;
+            int num_building = geometry[i][j].isBuilding
+                             + geometry[i][j + 1].isBuilding 
+                             + geometry[i][j + 2].isBuilding 
+                             + geometry[i][j + 3].isBuilding 
+                             + geometry[i][j + 4].isBuilding 
+                             + geometry[i + 1][j].isBuilding
+                             + geometry[i + 1][j + 1].isBuilding 
+                             + geometry[i + 1][j + 2].isBuilding 
+                             + geometry[i + 1][j + 3].isBuilding 
+                             + geometry[i + 1][j + 4].isBuilding 
+                             + geometry[i + 2][j].isBuilding
+                             + geometry[i + 2][j + 1].isBuilding 
+                             + geometry[i + 2][j + 2].isBuilding 
+                             + geometry[i + 2][j + 3].isBuilding 
+                             + geometry[i + 2][j + 4].isBuilding 
+                             + geometry[i + 3][j].isBuilding
+                             + geometry[i + 3][j + 1].isBuilding 
+                             + geometry[i + 3][j + 2].isBuilding 
+                             + geometry[i + 3][j + 3].isBuilding 
+                             + geometry[i + 3][j + 4].isBuilding 
+                             + geometry[i + 4][j].isBuilding
+                             + geometry[i + 4][j + 1].isBuilding 
+                             + geometry[i + 4][j + 2].isBuilding 
+                             + geometry[i + 4][j + 3].isBuilding 
+                             + geometry[i + 4][j + 4].isBuilding 
+                             ;
+
+            removed[count].x = geometry[i + 1][j + 1].x;
+            removed[count].y = geometry[i + 1][j + 1].y;
+            
+            if (num_building >= 13){
+                removed[count].z = (
+                            geometry[i][j].z * geometry[i][j].isBuilding
+                             + geometry[i][j + 1].z * geometry[i][j + 1].isBuilding
+                             + geometry[i][j + 2].z * geometry[i][j + 2].isBuilding
+                             + geometry[i][j + 3].z * geometry[i][j + 3].isBuilding
+                             + geometry[i][j + 4].z * geometry[i][j + 4].isBuilding
+                             + geometry[i + 1][j].z * geometry[i + 1][j].isBuilding
+                             + geometry[i + 1][j + 1].z * geometry[i + 1][j + 1].isBuilding
+                             + geometry[i + 1][j + 2].z * geometry[i + 1][j + 2].isBuilding
+                             + geometry[i + 1][j + 3].z * geometry[i + 1][j + 3].isBuilding
+                             + geometry[i + 1][j + 4].z * geometry[i + 1][j + 4].isBuilding
+                             + geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
+                             + geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding
+                             + geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding
+                             + geometry[i + 2][j + 3].z * geometry[i + 2][j + 3].isBuilding
+                             + geometry[i + 2][j + 4].z * geometry[i + 2][j + 4].isBuilding
+                             + geometry[i + 3][j].z * geometry[i + 3][j].isBuilding
+                             + geometry[i + 3][j + 1].z * geometry[i + 3][j + 1].isBuilding
+                             + geometry[i + 3][j + 2].z * geometry[i + 3][j + 2].isBuilding
+                             + geometry[i + 3][j + 3].z * geometry[i + 3][j + 3].isBuilding
+                             + geometry[i + 3][j + 4].z * geometry[i + 3][j + 4].isBuilding
+                             + geometry[i + 4][j].z * geometry[i + 4][j].isBuilding
+                             + geometry[i + 4][j + 1].z * geometry[i + 4][j + 1].isBuilding
+                             + geometry[i + 4][j + 2].z * geometry[i + 4][j + 2].isBuilding
+                             + geometry[i + 4][j + 3].z * geometry[i + 4][j + 3].isBuilding
+                             + geometry[i + 4][j + 4].z * geometry[i + 4][j + 4].isBuilding
+                             )/num_building; // 建物点の平均値
+                removed[count].isBuilding = true;
+            }else{
+                removed[count].z = (
+                            geometry[i][j].z * !geometry[i][j].isBuilding
+                             + geometry[i][j + 1].z * !geometry[i][j + 1].isBuilding
+                             + geometry[i][j + 2].z * !geometry[i][j + 2].isBuilding
+                             + geometry[i][j + 3].z * !geometry[i][j + 3].isBuilding
+                             + geometry[i][j + 4].z * !geometry[i][j + 4].isBuilding
+                             + geometry[i + 1][j].z * !geometry[i + 1][j].isBuilding
+                             + geometry[i + 1][j + 1].z * !geometry[i + 1][j + 1].isBuilding
+                             + geometry[i + 1][j + 2].z * !geometry[i + 1][j + 2].isBuilding
+                             + geometry[i + 1][j + 3].z * !geometry[i + 1][j + 3].isBuilding
+                             + geometry[i + 1][j + 4].z * !geometry[i + 1][j + 4].isBuilding
+                             + geometry[i + 2][j].z * !geometry[i + 2][j].isBuilding
+                             + geometry[i + 2][j + 1].z * !geometry[i + 2][j + 1].isBuilding
+                             + geometry[i + 2][j + 2].z * !geometry[i + 2][j + 2].isBuilding
+                             + geometry[i + 2][j + 3].z * !geometry[i + 2][j + 3].isBuilding
+                             + geometry[i + 2][j + 4].z * !geometry[i + 2][j + 4].isBuilding
+                             + geometry[i + 3][j].z * !geometry[i + 3][j].isBuilding
+                             + geometry[i + 3][j + 1].z * !geometry[i + 3][j + 1].isBuilding
+                             + geometry[i + 3][j + 2].z * !geometry[i + 3][j + 2].isBuilding
+                             + geometry[i + 3][j + 3].z * !geometry[i + 3][j + 3].isBuilding
+                             + geometry[i + 3][j + 4].z * !geometry[i + 3][j + 4].isBuilding
+                             + geometry[i + 4][j].z * !geometry[i + 4][j].isBuilding
+                             + geometry[i + 4][j + 1].z * !geometry[i + 4][j + 1].isBuilding
+                             + geometry[i + 4][j + 2].z * !geometry[i + 4][j + 2].isBuilding
+                             + geometry[i + 4][j + 3].z * !geometry[i + 4][j + 3].isBuilding
+                             + geometry[i + 4][j + 4].z * !geometry[i + 4][j + 4].isBuilding
+                                    )/(double)(25 - num_building); // 地面点の平均値
+                removed[count].isBuilding = false;
+            }
+        }
+    }
+    removed.resize(count);
+}
 
 int main()
 {
