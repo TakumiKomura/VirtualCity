@@ -108,7 +108,8 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
          }
          if(completed==1){
             int k=savecol.size();
-            if(k<1000){
+            if(k<200){
+                /*k=1030000/n/114.5*/
                 for(int i=0; i<k; i++){
                     jgeometry[saverow[i]][savecol[i]].isBuilding=true;
                 }
@@ -144,6 +145,10 @@ void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
 
 int main()
 {
+
+     system_clock::time_point start, endtime;
+      start = system_clock::now();
+    // string input_path = "250_records_complemented.txt";
     string input_path = "53394640_dsm_1m_complemented.txt";
 
     ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
@@ -152,6 +157,7 @@ int main()
         exit(1);
     }
 
+    // string output_path = "53394640_dsm_1m_distinguished.txt";
     string output_path = "53394640_dsm_1m_distinguished.txt";
 
     ofstream file_out{output_path}; //-std=c++17でコンパイル可能（file_out)
@@ -164,25 +170,26 @@ int main()
 
     input_complemented(geometry, file_in);
 
-    // system_clock::time_point start, end;
-    // start = system_clock::now();
-    // end = system_clock::now();
-    // cout << duration_cast<nanoseconds>(end - start).count() << " nanosec" << endl;
+    
+    
 
-    int end[310][380]={0};//探索済みの印
+    /*int a=0,b=0;*/
+    
  //ここでエリアの行数と列数を求める
     int row,col;
     row=geometry.size();//行数の取得
     col=geometry.at(0).size();//列数の取得
-    int i,j,k,l,n=3,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
+    int i,j,k,l,n=18,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
     int nrow=row/n;//行数を均等に分割
     int ncol=col/n;//列数を均等に分割
     int arow=row%n;//あまり
     int acol=col%n;//あまり
     int p_n_row=nrow,p_n_col=ncol;//現在いるエリアの列数,行数
     int srow=0,scol=0;//どこまで行列を使用したか(geometryからjgeometryへの代入操作時に必要)
+    int end[310][380]={0};//探索済みの印
     double sumz=0,summ=0;
     vector<vector<Point>> jgeometry(nrow+arow,vector<Point>(ncol+acol));
+    vector<double> sort_geometry((nrow+arow)*(ncol+acol),0);
     for(k=0; k<n; k++){
         if(k==n-1) p_n_row+=arow;
         for(l=0; l<n; l++){
@@ -190,7 +197,7 @@ int main()
              for(i=0; i<p_n_row; i++){
                     for(j=0; j<p_n_col; j++){
                         jgeometry[i][j]=geometry[i+srow][j+scol];
-                        /*sort_geometry[sr]=geometry[i+srow][j+scol].z;*/
+                        sort_geometry[sr]=geometry[i+srow][j+scol].z;
                         if(geometry[i+srow][j+scol].z<=15&&geometry[i+srow][j+scol].z>5){
                         summ+=geometry[i+srow][j+scol].z;
                         av_sm++;
@@ -205,16 +212,19 @@ int main()
 
     //上限値の決定
     if(av_sr!=0){
-        limit=sumz/av_sr+5;
+        limit=sumz/av_sr+3;
     }
-    else{
-        limit=summ/av_sm+5;
+    else if(av_sm!=0){
+        limit=summ/av_sm+3;
+    }else{
+        limit=0;
     }
         for(i=0; i<p_n_row; i++){
             for(j=0; j<p_n_col; j++){
                 end[i][j]=0;
             }
         }
+       
         for(i=0; i<p_n_row; i++){
             for(j=0; j<p_n_col; j++){
                 if(jgeometry[i][j].z<=limit&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
@@ -222,6 +232,15 @@ int main()
                 }
             }
         }
+        /*for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                if(jgeometry[i][j].isBuilding==1) a++;
+                else b++;
+            }
+        }
+        std::cout << a << " " << b << "\n";
+        a=0;
+        b=0;*/
         for(i=0; i<p_n_row; i++){
             for(j=0; j<p_n_col; j++){
                 geometry[i+srow][j+scol]=jgeometry[i][j];
@@ -235,9 +254,11 @@ int main()
             av_sm=0;
             if(l==n-1) p_n_col-=acol;
             }
+            if(k==n-1) p_n_row-=arow;
             scol=0;
             srow+=p_n_row;
-            if(k==n-1) p_n_row-=arow;
         }
         output_distinguished(geometry, file_out);
+         endtime = system_clock::now();
+         std::cout << duration_cast<nanoseconds>(endtime - start).count() << " nanosec" << endl;
 }
