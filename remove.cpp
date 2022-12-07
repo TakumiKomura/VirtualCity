@@ -61,6 +61,7 @@ void smoothing(vector<vector<Point>>& removed)
                 if(removed[i-1][j-1].isBuilding == true){
                     ++num_building;
                     if(min_height > removed[i-1][j-1].z) min_height = removed[i-1][j-1].z;
+                }
                 if(removed[i-1][j].isBuilding == true){
                     ++num_building;
                     if(min_height > removed[i-1][j].z) min_height = removed[i-1][j].z;
@@ -86,12 +87,11 @@ void smoothing(vector<vector<Point>>& removed)
                     if(min_height > removed[i+1][j-1].z) min_height = removed[i+1][j-1].z;
                 }
             }
-            if(num_building < 2){
+            if(num_building < 9){
                 removed[i][j].isBuilding = false;
                 removed[i][j].z = min_height;
             }
         }
-    }
     }
 }
 
@@ -103,7 +103,6 @@ void remove(vector<vector<Point>>& geometry, vector<vector<Point>>& removed)
     for (int i = 0; i < ROW - 2; i += 3) // ROW - k + 1; i += k
     {
         col = 0;
-        vector<Point> newrecord;
         for (int j = 0; j < COL - 2; j += 3) // COL - k + 1; i += k
         {
             int num_building = geometry[i][j].isBuilding
@@ -169,9 +168,8 @@ int main()
     vector<vector<Point>> removed((ROW - 2) / 3, vector<Point>((COL - 2) / 3 + 1));
 
     input_distinguished(geometry, file_in);
-    // remove(geometry, file_out);
     remove(geometry, removed);
-    // smoothing(removed);
+    smoothing(removed);
     output_removed(removed, file_out);
 
     // system_clock::time_point start, end;
