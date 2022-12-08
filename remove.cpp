@@ -50,9 +50,9 @@ void smoothing(vector<vector<Point>>& removed)
 {
     int row = int(removed.size());
     int col = int(removed[0].size());
-    for(int i = 1; i < row - 1; ++row)
+    for(int i = 1; i < row - 1; ++i)
     {
-        for(int j = 1; j < col - 1; ++col)
+        for(int j = 1; j < col - 1; ++j)
         {
             int num_building = 0;
             double min_height = removed[i][j-1].z;
@@ -86,11 +86,12 @@ void smoothing(vector<vector<Point>>& removed)
                     ++num_building;
                     if(min_height > removed[i+1][j-1].z) min_height = removed[i+1][j-1].z;
                 }
+                if(num_building < 3){
+                    removed[i][j].isBuilding = false;
+                    removed[i][j].z = min_height;
+                }
             }
-            if(num_building < 9){
-                removed[i][j].isBuilding = false;
-                removed[i][j].z = min_height;
-            }
+            
         }
     }
 }
