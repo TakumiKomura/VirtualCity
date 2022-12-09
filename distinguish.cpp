@@ -18,6 +18,7 @@ struct Point{
     double y;
     double z;
     bool isBuilding = true; //建物ラベルとして初期化
+    bool outline = false; //建物の輪郭判定
     int area;
 };
 
@@ -40,7 +41,7 @@ void output_distinguished(vector<vector<Point>>& geometry, ofstream& file_out)
     {
         for (int j = 0; j < COL; ++j)
         {
-            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << endl;
+            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << ' ' <<  geometry[i][j].outline << endl;
         }
     }
 }
@@ -83,6 +84,7 @@ void gjudge(std::vector<std::vector<Point>>& geometry,int& row,int& col,int& n,s
                 return;
             }else{
                 end[row+i][col+j]=1;
+                geometry[row][col].outline=true;//建物の輪郭であることの更新
             }
                 }
             }
@@ -108,7 +110,7 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
          }
          if(completed==1){
             int k=savecol.size();
-            if(k<200){
+            if(k<600){
                 /*k=1030000/n/114.5*/
                 for(int i=0; i<k; i++){
                     jgeometry[saverow[i]][savecol[i]].isBuilding=true;
@@ -173,13 +175,12 @@ int main()
     
     
 
-    /*int a=0,b=0;*/
     
  //ここでエリアの行数と列数を求める
     int row,col;
     row=geometry.size();//行数の取得
     col=geometry.at(0).size();//列数の取得
-    int i,j,k,l,n=18,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
+    int i,j,k,l,n=10,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
     int nrow=row/n;//行数を均等に分割
     int ncol=col/n;//列数を均等に分割
     int arow=row%n;//あまり
@@ -232,15 +233,6 @@ int main()
                 }
             }
         }
-        /*for(i=0; i<p_n_row; i++){
-            for(j=0; j<p_n_col; j++){
-                if(jgeometry[i][j].isBuilding==1) a++;
-                else b++;
-            }
-        }
-        std::cout << a << " " << b << "\n";
-        a=0;
-        b=0;*/
         for(i=0; i<p_n_row; i++){
             for(j=0; j<p_n_col; j++){
                 geometry[i+srow][j+scol]=jgeometry[i][j];
