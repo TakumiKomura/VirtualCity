@@ -7,7 +7,7 @@
 #include<algorithm>
 
 #define ROW 923
-#define COL 1131
+#define COL 1127
 
 using namespace std;
 using namespace chrono;
@@ -17,7 +17,7 @@ struct Point{
     double y;
     double z;
     bool isBuilding = true; //建物ラベルとして初期化
-    int area;
+    bool outline = false;
 };
 
 // read file and strage points as an array
@@ -27,7 +27,7 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
     {
         for (int j = 0; j < COL; ++j)
         {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z >> geometry[i][j].isBuilding;
+            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z >> geometry[i][j].isBuilding >> geometry[i][j].outline;
         }
     }
 }
@@ -86,12 +86,11 @@ void smoothing(vector<vector<Point>>& removed)
                     ++num_building;
                     if(min_height > removed[i+1][j-1].z) min_height = removed[i+1][j-1].z;
                 }
-                if(num_building < 3){
+                if(num_building < 4){
                     removed[i][j].isBuilding = false;
                     removed[i][j].z = min_height;
                 }
-            }
-            
+            }           
         }
     }
 }
@@ -100,7 +99,7 @@ void smoothing(vector<vector<Point>>& removed)
 void remove(vector<vector<Point>>& geometry, vector<vector<Point>>& removed)
 {
     int row = 0;
-    int col = 0;
+    int col;
     for (int i = 0; i < ROW - 2; i += 3) // ROW - k + 1; i += k
     {
         col = 0;
@@ -166,7 +165,7 @@ int main()
     }
 
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
-    vector<vector<Point>> removed((ROW - 2) / 3, vector<Point>((COL - 2) / 3 + 1));
+    vector<vector<Point>> removed((ROW - 2) / 3, vector<Point>((COL - 2) / 3));
 
     input_distinguished(geometry, file_in);
     remove(geometry, removed);

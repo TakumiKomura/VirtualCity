@@ -8,7 +8,7 @@
 #include<algorithm>
 
 #define ROW 923
-#define COL 1131
+#define COL 1127
 
 using namespace std;
 using namespace chrono;
@@ -29,7 +29,7 @@ void input_complemented(vector<vector<Point>>& geometry, ifstream& file_in)
     {
         for (int j = 0; j < COL; ++j)
         {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z >> geometry[i][j].area;
+            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
         }
     }
 }
@@ -134,22 +134,11 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
     }
 }
 
-void output_complemented(vector<vector<Point>>& geometry, ofstream& file_out)
-{
-    for (int i = 0; i < ROW; ++i)
-    {
-        for (int j = 0; j < COL; ++j)
-        {
-            file_out << geometry[i][j].x << ' ' << geometry[i][j].y << ' ' << geometry[i][j].z << ' ' << geometry[i][j].isBuilding << endl;
-        }
-    }
-}
-
 int main()
 {
 
-     system_clock::time_point start, endtime;
-      start = system_clock::now();
+    system_clock::time_point start, endtime;
+    start = system_clock::now();
     // string input_path = "250_records_complemented.txt";
     string input_path = "53394640_dsm_1m_complemented.txt";
 
@@ -171,11 +160,7 @@ int main()
     vector<vector<Point>> geometry(ROW, vector<Point>(COL));
 
     input_complemented(geometry, file_in);
-
-    
-    
-
-    
+  
  //ここでエリアの行数と列数を求める
     int row,col;
     row=geometry.size();//行数の取得
@@ -251,6 +236,6 @@ int main()
             srow+=p_n_row;
         }
         output_distinguished(geometry, file_out);
-         endtime = system_clock::now();
-         std::cout << duration_cast<nanoseconds>(endtime - start).count() << " nanosec" << endl;
+        endtime = system_clock::now();
+        std::cout << duration_cast<nanoseconds>(endtime - start).count() << " nanosec" << endl;
 }
