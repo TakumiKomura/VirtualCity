@@ -87,6 +87,83 @@ void input_distinguished(vector<vector<Point>>& geometry, ifstream& file_in)
     }
 }
 
+ void distinguish(std::vector<std::vector<Point>>& geometry){
+ //ここでエリアの行数と列数を求める
+    int row,col;
+    row=geometry.size();//行数の取得
+    col=geometry.at(0).size();//列数の取得
+    int i,j,k,l,n=10,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
+    int nrow=row/n;//行数を均等に分割
+    int ncol=col/n;//列数を均等に分割
+    int arow=row%n;//あまり
+    int acol=col%n;//あまり
+    int p_n_row=nrow,p_n_col=ncol;//現在いるエリアの列数,行数
+    int srow=0,scol=0;//どこまで行列を使用したか(geometryからjgeometryへの代入操作時に必要)
+    int end[310][380]={0};//探索済みの印
+    double sumz=0,summ=0;
+    vector<vector<Point>> jgeometry(nrow+arow,vector<Point>(ncol+acol));
+    vector<double> sort_geometry((nrow+arow)*(ncol+acol),0);
+    for(k=0; k<n; k++){
+        if(k==n-1) p_n_row+=arow;
+        for(l=0; l<n; l++){
+             if(l==n-1) p_n_col+=acol;
+             for(i=0; i<p_n_row; i++){
+                    for(j=0; j<p_n_col; j++){
+                        jgeometry[i][j]=geometry[i+srow][j+scol];
+                        sort_geometry[sr]=geometry[i+srow][j+scol].z;
+                        if(geometry[i+srow][j+scol].z<=15&&geometry[i+srow][j+scol].z>5){
+                        summ+=geometry[i+srow][j+scol].z;
+                        av_sm++;
+                        }
+                        if(geometry[i+srow][j+scol].z<=25&&geometry[i+srow][j+scol].z>15){
+                        sumz+=geometry[i+srow][j+scol].z;
+                        av_sr++;
+                        }
+                        sr++;
+                    }
+    }
+
+    //上限値の決定
+    if(av_sr!=0){
+        limit=sumz/av_sr+3;
+    }
+    else if(av_sm!=0){
+        limit=summ/av_sm+3;
+    }else{
+        limit=0;
+    }
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                end[i][j]=0;
+            }
+        }
+       
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                if(jgeometry[i][j].z<=limit&&jgeometry[i][j].isBuilding==1&&end[i][j]==0){
+                    judge(jgeometry,i,j,p_n_row,p_n_col,limit,end);
+                }
+            }
+        }
+        for(i=0; i<p_n_row; i++){
+            for(j=0; j<p_n_col; j++){
+                geometry[i+srow][j+scol]=jgeometry[i][j];
+            }
+        }
+            scol+=p_n_col;
+            sr=0;
+            sumz=0;
+            summ=0;
+            av_sr=0;
+            av_sm=0;
+            if(l==n-1) p_n_col-=acol;
+            }
+            if(k==n-1) p_n_row-=arow;
+            scol=0;
+            srow+=p_n_row;
+    }
+}
+
 // write points to file
 void output_removed(vector<vector<Point>>& removed, ofstream& file_out)
 {
