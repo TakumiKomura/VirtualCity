@@ -20,90 +20,23 @@ struct Point{
 };
 
 // read file and strage points as an array
-// void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
-// {
-//     Point trash;
-//     for (int j = 0; j < 897; ++j)
-//     {
-//         file_in >> trash.x >> trash.y >> trash.z;
-//     }
-//     for (int i = 0; i < ROW; ++i)
-//     {
-//         file_in >> trash.x >> trash.y >> trash.z;
-//         file_in >> trash.x >> trash.y >> trash.z;
-//         for (int j = 0; j < COL; ++j)
-//         {
-//             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-//         }
-//     }
-// }
-
 void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
 {
-    Point *trash;
-    trash = new Point;
+    Point trash;
     for (int j = 0; j < 897; ++j)
     {
-        file_in >> trash->x >> trash->y >> trash->z;
+        file_in >> trash.x >> trash.y >> trash.z;
     }
-    for (int i = 0; i < 308; ++i)
+    for (int i = 0; i < ROW; ++i)
     {
-        for (int j = 0; j < 377; ++j) //376
-        {
-            // file_in >> trash->x >> trash->y >> trash->z;
-            // file_in >> trash->x >> trash->y >> trash->z;
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        for (int j = 377; j < 754; ++j) //376, 752
+        // 左端の2列を捨てる
+        // file_in >> trash.x >> trash.y >> trash.z;
+        // file_in >> trash.x >> trash.y >> trash.z;
+        for (int j = 0; j < COL; ++j)
         {
             file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
         }
-        for (int j = 754; j < COL; ++j) //752
-        {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        // file_in >> trash->x >> trash->y >> trash->z;
-        // file_in >> trash->x >> trash->y >> trash->z;
     }
-    for (int i = 308; i < 616; ++i)
-    {
-        for (int j = 0; j < 377; ++j)
-        {
-            // file_in >> trash->x >> trash->y >> trash->z;
-            // file_in >> trash->x >> trash->y >> trash->z;
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        for (int j = 377; j < 754; ++j)
-        {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        for (int j = 754; j < COL; ++j)
-        {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        // file_in >> trash->x >> trash->y >> trash->z;
-        // file_in >> trash->x >> trash->y >> trash->z;
-    }
-    for (int i = 616; i < ROW; ++i)
-    {
-        for (int j = 0; j < 377; ++j)
-        {
-            // file_in >> trash->x >> trash->y >> trash->z;
-            // file_in >> trash->x >> trash->y >> trash->z;
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        for (int j = 377; j < 754; ++j)
-        {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        for (int j = 754; j < COL; ++j)
-        {
-            file_in >> geometry[i][j].x >> geometry[i][j].y >> geometry[i][j].z;
-        }
-        // file_in >> trash->x >> trash->y >> trash->z;
-        // file_in >> trash->x >> trash->y >> trash->z;
-    }
-    delete trash;
 }
 
 // write points to file
@@ -279,11 +212,10 @@ int sgjudge(std::vector<std::vector<Point>> geometry,int row,int col,int end[310
                 for(int j=-1; j<2; j++){
                     if(row+i>=0&&col+j>=0&&(row+i<rowsize&&col+j<colsize)){
                        if(i==0&&j==0){
-                    }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&end[row+i][col+j]==0&&geometry[row+i][col+j].z<=gmax){
-                    return 0;//まだ探索できる点があった
                     }else{
+                        return 0;//まだ探索できる点があった
                     }
-                     }
+                }
             }
     }
      return 1;
@@ -293,35 +225,33 @@ void gjudge(std::vector<std::vector<Point>>& geometry,int& row,int& col,int& n,s
 {
     int i,j;
     for(i=-1; i<2; i++){
-            //隣接点走査
-            for(j=-1; j<2; j++){
-                if((row+i>=0&&col+j>=0)&&(row+i<rowsize&&col+j<colsize)){
-            if(i==0&&j==0){
-            }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding==true&&geometry[row+i][col+j].z<=gmax){
-                //地面判定できる点があった
-                 pastrow.push_back(row);
-                 pastcol.push_back(col);//1つ前の行列の添え字
-                 saverow.push_back(row);
-                 savecol.push_back(col);
-                n++;
-                /*std::cout << geometry[row+i][col+j].z << "\n";*/
-                row=row+i;//次の点の行列の添え字
-                col=col+j;
-                geometry[row][col].isBuilding=false;//地面であることの更新
-                t=false;
-                return;
-            }else{
-                end[row+i][col+j]=1;
-                geometry[row][col].outline=true;//建物の輪郭であることの更新
-            }
+        //隣接点走査
+        for(j=-1; j<2; j++){
+            if((row+i>=0&&col+j>=0)&&(row+i<rowsize&&col+j<colsize)){
+                if(i==0&&j==0){
+                }else if(std::fabs(geometry[row+i][col+j].z-geometry[row][col].z)<=0.5&&geometry[row+i][col+j].isBuilding==true&&geometry[row+i][col+j].z<=gmax){
+                    //地面判定できる点があった
+                    pastrow.push_back(row);
+                    pastcol.push_back(col);//1つ前の行列の添え字
+                    saverow.push_back(row);
+                    savecol.push_back(col);
+                    n++;
+                    row+=i;//次の点の行列の添え字
+                    col+=j;
+                    geometry[row][col].isBuilding=false;//地面であることの更新
+                    t=false;
+                    return;
+                }else{
+                    end[row+i][col+j]=1;
+                    geometry[row][col].outline=true;//建物の輪郭であることの更新
                 }
             }
         }
+    }
 }
 
 void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,int rowsize, int colsize,int gmax,int end[310][380])
-{
-    
+{ 
     std::vector<int> pastrow;//1つ前の点の行の添え字
     std::vector<int> pastcol;//1つ前の点の列の添え字
     std::vector<int> saverow;
@@ -339,7 +269,6 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
          if(completed==1){
             int k=savecol.size();
             if(k<600){
-                /*k=1030000/n/114.5*/
                 for(int i=0; i<k; i++){
                     jgeometry[saverow[i]][savecol[i]].isBuilding=true;
                 }
@@ -353,7 +282,6 @@ void judge(std::vector<std::vector<Point>>& jgeometry,int startrow,int startcol,
             end[row][col]=1;//隣接点が地面でないことをすべて確認した印
             row=pastrow[n-1];
             col=pastcol[n-1];
-            /*std::cout << pastrow[n-1] << " " << pastcol[n-1] << " " << n << "\n";*/
             pastrow.pop_back();
             pastcol.pop_back();
             n--;
@@ -442,7 +370,7 @@ void remove(vector<vector<Point>>& geometry, vector<vector<Point>>& removed)
                              + geometry[i + 1][j + 2].z * geometry[i + 1][j + 2].isBuilding
                              + geometry[i + 2][j].z * geometry[i + 2][j].isBuilding
                              + geometry[i + 2][j + 1].z * geometry[i + 2][j + 1].isBuilding
-                             + geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding)/num_building; // 建物点の平均値
+                             + geometry[i + 2][j + 2].z * geometry[i + 2][j + 2].isBuilding) / num_building; // 建物点の平均値
                 removed[row][col].isBuilding = true;
             }else{
                 removed[row][col].z = (geometry[i][j].z * !geometry[i][j].isBuilding

@@ -1,7 +1,9 @@
 #include"geometry_points.h"
-
 int main()
 {
+    system_clock::time_point start_time, end_time;
+    start_time = system_clock::now();
+
     string input_path = "53394640_dsm_1m.dat";
 
     ifstream file_in{input_path}; //-std=c++17でコンパイル可能（file_in)
@@ -27,8 +29,8 @@ int main()
     //ここでエリアの行数と列数を求める
     int row,col;
     row=geometry.size();//行数の取得
-    col=geometry.at(0).size();//列数の取得
-    int i,j,k,l,n=10,sr=0,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
+    col=geometry[0].size();//列数の取得
+    int i,j,k,l,n=10,limit,av_sr=0,av_sm=0;//nは分割数(9なら3)
     int nrow=row/n;//行数を均等に分割
     int ncol=col/n;//列数を均等に分割
     int arow=row%n;//あまり
@@ -38,7 +40,6 @@ int main()
     int end[310][380]={0};//探索済みの印
     double sumz=0,summ=0;
     vector<vector<Point>> jgeometry(nrow+arow,vector<Point>(ncol+acol));
-    vector<double> sort_geometry((nrow+arow)*(ncol+acol),0);
     for(k=0; k<n; k++){
         if(k==n-1) p_n_row+=arow;
         for(l=0; l<n; l++){
@@ -46,7 +47,6 @@ int main()
              for(i=0; i<p_n_row; i++){
                     for(j=0; j<p_n_col; j++){
                         jgeometry[i][j]=geometry[i+srow][j+scol];
-                        sort_geometry[sr]=geometry[i+srow][j+scol].z;
                         if(geometry[i+srow][j+scol].z<=15&&geometry[i+srow][j+scol].z>5){
                         summ+=geometry[i+srow][j+scol].z;
                         av_sm++;
@@ -55,7 +55,6 @@ int main()
                         sumz+=geometry[i+srow][j+scol].z;
                         av_sr++;
                         }
-                        sr++;
                     }
     }
 
@@ -87,7 +86,6 @@ int main()
             }
         }
             scol+=p_n_col;
-            sr=0;
             sumz=0;
             summ=0;
             av_sr=0;
@@ -105,5 +103,7 @@ int main()
 
     smoothing(removed);
 
-    output_removed(removed, file_out);        
+    output_removed(removed, file_out); 
+    end_time = system_clock::now();
+    cout << duration_cast<nanoseconds>(end_time - start_time).count() << " nanosec" << endl;
 }

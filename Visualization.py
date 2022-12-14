@@ -30,7 +30,8 @@ for i in range(1,1135):
 
 #三角形分割
 point_delaunay=[]
-for i in range(len(points)):
+l = len(points)
+for i in range(l):
     point_delaunay.append([points[i][0],points[i][1]])
 
 points_delaunay_2=np.array(point_delaunay)
@@ -48,11 +49,8 @@ for line in tri.simplices:
 for point in points:
     point[1]=-point[1]
     
-#print(points_ground)
-#print(points_building)
-
 #VRML
-output_data=input("Enter the output file name ")
+output_data=input("Enter the output file name : ")
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
     f2.write("Viewpoint{\n")
@@ -162,4 +160,3 @@ with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("\t\t\t]\n")
     f2.write("\t}\n")
     f2.write("}\n")
-    
