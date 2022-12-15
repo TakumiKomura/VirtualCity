@@ -11,7 +11,7 @@ def outer_product_z(pt1,pt2,pt3):
     
 
 #ファイルの読み込み(データはリストで管理)
-file_data="53394640_dsm_1m_removed.txt"
+file_data="53394640_dsm_1m_removed.dat"
 points=[]
 with open(file_data) as f:
     lines=f.readlines()
