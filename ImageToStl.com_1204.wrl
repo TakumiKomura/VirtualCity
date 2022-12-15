@@ -4,8 +4,12 @@
 Shape {
 appearance DEF M0 Appearance {
 material Material {
-diffuseColor 0.86275 0.86275 0.86275
+diffuseColor 1.000 0.508 0.776 # ピンク
+emissiveColor 1.000 0.508 0.776 # 発光色
 }
+# texture ImageTexture {
+#     url "1204_u1_v1.png"
+# }
 }
 geometry IndexedFaceSet {
 coord Coordinate {
