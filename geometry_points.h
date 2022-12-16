@@ -163,14 +163,15 @@ int sgjudge(vector<vector<Point>>& geometry, int row, int col, int end[310][380]
     for(int i = -1; i < 2; i++){
         for(int j = -1; j < 2; j++){
             if((row + i >= 0 && col + j >= 0) && (row + i < rowsize && col + j < colsize)){
-                if(i != 0 || j != 0){
-                    cout << "I'm here from sg judge" << endl;//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                 if(i == 0 && j == 0){
+                    }else if(std::fabs(geometry[row + i][col + j].z - geometry[row][col].z) <= 0.5 && end[row + i][col + j] == 0 && geometry[row + i][col + j].z <= gmax){
                     return 0;//まだ探索できる点があった
-                }
+                    }else{
+                    }
             }
         }
     }
-    cout << "OK from sg judge" << endl; /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     return 1;
 }
 
@@ -201,7 +202,6 @@ void gjudge(vector<vector<Point>>& geometry, int row, int col, int& n, vector<in
             }
         }
     }
-    // cout << "OK from g judge" << endl; ///////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void judge(vector<vector<Point>>& jgeometry, int startrow, int startcol, int rowsize, int colsize, int gmax, int end[310][380])
@@ -219,7 +219,6 @@ void judge(vector<vector<Point>>& jgeometry, int startrow, int startcol, int row
     while(completed == 0){
         if(row == startrow && col == startcol){//探索地点がスタート地点まで戻った時の処理
             completed = sgjudge(jgeometry, row, col, end, rowsize, colsize, gmax);
-            cout << completed << endl;
         }
         if(completed == 1){
             int k = savecol.size();
@@ -243,7 +242,6 @@ void judge(vector<vector<Point>>& jgeometry, int startrow, int startcol, int row
             //1つ前の点に戻って走査を再開する
         }
     }
-    cout << "OK from judge" << endl; ////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void distinguish(vector<vector<Point>>& geometry){
