@@ -17,6 +17,17 @@ struct Point{
     bool isBuilding = true; //建物ラベルとして初期化
 };
 
+void input_raw(vector<vector<Point>> &geometry, ifstream &file_in);
+void output_removed(vector<vector<Point>> &removed, ofstream &file_out);
+double mean_of_neighbourhood(double neighbourhood[], int len);
+void complement(vector<vector<Point>> &geometry);
+int sgjudge(vector<vector<Point>>& geometry, int row, int col, int end[310][380], int rowsize, int colsize, int gmax);
+void gjudge(vector<vector<Point>> &geometry, int row, int col, int &n, vector<int> &pastrow, vector<int> &pastcol, bool &t, int rowsize, int colsize, int gmax, int end[310][380], vector<int> &saverow, vector<int> &savecol);
+void judge(vector<vector<Point>> &jgeometry, int startrow, int startcol, int rowsize, int colsize, int gmax, int end[310][380]);
+void distinguish(vector<vector<Point>> &geometry);
+void remove(vector<vector<Point>> &geometry, vector<vector<Point>> &removed);
+void smoothing(vector<vector<Point>> &removed);
+
 // read file and strage points as an array
 void input_raw(vector<vector<Point>>& geometry, ifstream& file_in)
 {
@@ -314,55 +325,6 @@ void distinguish(vector<vector<Point>>& geometry){
     }
 }
 
-void smoothing(vector<vector<Point>>& removed)
-{
-    int row = int(removed.size());
-    int col = int(removed[0].size());
-    for(int i = 1; i < row - 1; ++i)
-    {
-        for(int j = 1; j < col - 1; ++j)
-        {
-            int num_building = 0;
-            double min_height = removed[i][j-1].z;
-            if(removed[i][j].isBuilding == true){
-                if(removed[i][j-1].isBuilding == true) ++num_building;
-                if(removed[i-1][j-1].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i-1][j-1].z) min_height = removed[i-1][j-1].z;
-                }
-                if(removed[i-1][j].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i-1][j].z) min_height = removed[i-1][j].z;
-                }
-                if(removed[i-1][j+1].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i-1][j+1].z) min_height = removed[i-1][j+1].z;
-                }
-                if(removed[i][j+1].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i][j+1].z) min_height = removed[i][j+1].z;
-                }
-                if(removed[i+1][j+1].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i+1][j+1].z) min_height = removed[i+1][j+1].z;
-                }
-                if(removed[i+1][j].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i+1][j].z) min_height = removed[i+1][j].z;
-                }
-                if(removed[i+1][j-1].isBuilding == true){
-                    ++num_building;
-                    if(min_height > removed[i+1][j-1].z) min_height = removed[i+1][j-1].z;
-                }
-                if(num_building < 4){
-                    removed[i][j].isBuilding = false;
-                    removed[i][j].z = min_height;
-                }
-            }           
-        }
-    }
-}
-
 // from 9 points to 1 point
 void remove(vector<vector<Point>>& geometry, vector<vector<Point>>& removed)
 {
@@ -411,5 +373,54 @@ void remove(vector<vector<Point>>& geometry, vector<vector<Point>>& removed)
             col++;
         }
         row++;
+    }
+}
+
+void smoothing(vector<vector<Point>>& removed)
+{
+    int row = int(removed.size());
+    int col = int(removed[0].size());
+    for(int i = 1; i < row - 1; ++i)
+    {
+        for(int j = 1; j < col - 1; ++j)
+        {
+            int num_building = 0;
+            double min_height = removed[i][j-1].z;
+            if(removed[i][j].isBuilding == true){
+                if(removed[i][j-1].isBuilding == true) ++num_building;
+                if(removed[i-1][j-1].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i-1][j-1].z) min_height = removed[i-1][j-1].z;
+                }
+                if(removed[i-1][j].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i-1][j].z) min_height = removed[i-1][j].z;
+                }
+                if(removed[i-1][j+1].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i-1][j+1].z) min_height = removed[i-1][j+1].z;
+                }
+                if(removed[i][j+1].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i][j+1].z) min_height = removed[i][j+1].z;
+                }
+                if(removed[i+1][j+1].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i+1][j+1].z) min_height = removed[i+1][j+1].z;
+                }
+                if(removed[i+1][j].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i+1][j].z) min_height = removed[i+1][j].z;
+                }
+                if(removed[i+1][j-1].isBuilding == true){
+                    ++num_building;
+                    if(min_height > removed[i+1][j-1].z) min_height = removed[i+1][j-1].z;
+                }
+                if(num_building < 4){
+                    removed[i][j].isBuilding = false;
+                    removed[i][j].z = min_height;
+                }
+            }           
+        }
     }
 }
