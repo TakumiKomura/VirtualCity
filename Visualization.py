@@ -53,7 +53,7 @@ for point in points:
     point[1]=-point[1]
     
 #VRML
-output_data='sample.wrl'
+output_data=input('Enter the output file name : ')
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
     f2.write("Viewpoint{\n")
