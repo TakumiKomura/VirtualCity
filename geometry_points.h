@@ -5,7 +5,6 @@
 #include<cmath>
 
 #define ROW 923
-// #define COL 1127
 #define COL 1131
 
 using namespace std;
@@ -16,7 +15,6 @@ struct Point{
     double y;
     double z;
     bool isBuilding = true; //建物ラベルとして初期化
-    bool outline = false; //建物の輪郭判定
 };
 
 // read file and strage points as an array
@@ -163,11 +161,11 @@ int sgjudge(vector<vector<Point>>& geometry, int row, int col, int end[310][380]
     for(int i = -1; i < 2; i++){
         for(int j = -1; j < 2; j++){
             if((row + i >= 0 && col + j >= 0) && (row + i < rowsize && col + j < colsize)){
-                 if(i == 0 && j == 0){
-                    }else if(std::fabs(geometry[row + i][col + j].z - geometry[row][col].z) <= 0.5 && end[row + i][col + j] == 0 && geometry[row + i][col + j].z <= gmax){
+                if(i == 0 && j == 0){
+                }else if(std::fabs(geometry[row + i][col + j].z - geometry[row][col].z) <= 0.5 && end[row + i][col + j] == 0 && geometry[row + i][col + j].z <= gmax){
                     return 0;//まだ探索できる点があった
-                    }else{
-                    }
+                }else{
+                }
             }
         }
     }
@@ -197,7 +195,6 @@ void gjudge(vector<vector<Point>>& geometry, int row, int col, int& n, vector<in
                     return;
                 }else{
                     end[row + i][col + j] = 1;
-                    geometry[row][col].outline = true;//建物の輪郭であることの更新
                 }
             }
         }

@@ -1,6 +1,9 @@
 #Delaunay triangulation and convert to VRML file
 import numpy as np
 from scipy.spatial import Delaunay
+from time import perf_counter_ns
+
+start_time = perf_counter_ns()
 
 #裏表判定(外積のz成分で)
 def outer_product_z(pt1,pt2,pt3):
@@ -50,7 +53,7 @@ for point in points:
     point[1]=-point[1]
     
 #VRML
-output_data=input("Enter the output file name : ")
+output_data='sample.wrl'
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
     f2.write("Viewpoint{\n")
@@ -160,3 +163,7 @@ with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("\t\t\t]\n")
     f2.write("\t}\n")
     f2.write("}\n")
+
+end_time = perf_counter_ns()
+
+print('visualization.py:', end_time - start_time, 'nanoseconds')
