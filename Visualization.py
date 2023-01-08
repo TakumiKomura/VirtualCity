@@ -56,7 +56,6 @@ for point in points:
 output_data=input('Enter the output file name : ')
 with open(output_data,'w',encoding="utf_8") as f2:
     f2.write("#VRML V2.0 utf8\n")
-    f2.write("#VRML V2.0 utf8\n")
     f2.write("DEF FUJIKURA Transform{ #Sei\n")
     f2.write("\ttranslation -7085 11 32800\n")
     f2.write("\tscale 25 25 25\n")
